@@ -1,11 +1,29 @@
 /* globals.css o tu archivo CSS específico */
-body {
-  margin: 0;
-}
+  body {
+    background-color: black; /* Fondo negro para todo el cuerpo del documento */
+    color: white; /* Texto en color blanco */
+    font-size: 18px; /* Tamaño de texto un poco más grande */
+  }
+  
+  input, select, textarea {
+    background: #1b1b1b;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #585858;
+    background-color: #1b1b1b; /* Gris claro para los campos de formulario */
+    color: white; /* Texto de los formularios en negro para contraste */
+    border-radius: 5px; /* Bordes redondeados para los campos de formulario */
+    padding: 10px; /* Un poco de padding para mejor apariencia */
+    margin-bottom: 8px; /* Margen inferior para separar los campos */
+  }
 .container {
   display: flex;
   flex-wrap: nowrap; /* No permitas que los elementos se envuelvan */
   min-height: 100vh;
+}
+.ant-form-item-label label {
+  color: white !important;
+  font-size:18px /* Fuerza el color del texto a blanco */
 }
 
 .left-column {
@@ -55,14 +73,13 @@ input {
 }
 
 button {
-  width: 100%;
-  padding: 15px;
-  border: none;
-  background-color: #033d83;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
+  background-color: #f0f0f0; /* Gris claro para botones */
+  color: black; /* Texto del botón en negro */
+  padding: 10px 20px; /* Padding para botones */
+  border: none; /* Eliminar borde predeterminado */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cursor de mano al pasar sobre el botón */
+  transition: background-color 0.3s; /* Transición suave al cambiar de color */
 }
 
 button:hover {
@@ -80,6 +97,62 @@ button:hover {
 .forgot-password:hover {
   text-decoration: underline;
 }
+
+.ant-divider-horizontal {
+  border-top-color: white; /* Cambiar el color del divisor */
+}
+
+/* Estilos por defecto para los campos del formulario */
+.ant-input, .ant-select-selector, .ant-input-affix-wrapper, .ant-select-multiple .ant-select-selection-item, .ant-input-textarea {
+  background-color: #333 !important; /* Gris oscuro */
+  color: white !important; /* Texto blanco */
+  border-color: #444 !important; /* Borde un poco más claro que el fondo */
+}
+
+/* Estilo para el texto dentro de los Select de Ant Design */
+.ant-select-selection-item {
+  color: white !important;
+}
+
+/* Estilos por defecto para los placeholders */
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #bbb !important; /* Gris claro para los placeholders */
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #bbb !important;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #bbb !important;
+}
+
+/* Estilos para cuando los campos están enfocados (activo) */
+.ant-input:focus, .ant-select-selector:focus, .ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused, .ant-select-focused .ant-select-selector, .ant-input-textarea:focus {
+  background-color: #4f4f4f !important; /* Gris un poco más claro */
+  border-color: #555 !important; /* Borde para el elemento enfocado */
+  box-shadow: none !important; /* Eliminar cualquier sombra para mantenerlo simple */
+}
+
+/* Ajustes para elementos Select de Ant Design */
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: #555 !important;
+}
+
+/* Para ajustar los colores de las opciones dentro de los Select */
+.ant-select-item {
+  background-color: #4f4f4f !important;
+  color: white !important; /* Asegura que el texto de las opciones también sea blanco */
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #333 !important; /* Mantener el fondo oscuro incluso para opciones seleccionadas */
+}
+h1,h2,h3 {
+color: white;
+}
+
 
 @media (max-width: 768px) {
   .left-column,

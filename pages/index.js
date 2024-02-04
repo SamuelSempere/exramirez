@@ -2,8 +2,7 @@ import { useSession, signIn } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Form, Input, Select, Radio, Button, Divider,Row, Col } from 'antd';
-import React, { useState } from 'react';
-
+import React, { useState, useRef } from 'react';
 
 const IBANInput = ({ value = '', onChange }) => {
   const handleChange = (e) => {
@@ -12,6 +11,52 @@ const IBANInput = ({ value = '', onChange }) => {
   };
 
   return <Input value={value} onChange={handleChange} maxLength={29} />;
+};
+
+
+const SignaturePad = ({ onChange }) => {
+  const canvasRef = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+
+  const startDrawing = (e) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    setIsDrawing(true);
+    draw(e);
+  };
+
+  const draw = (e) => {
+    if (!isDrawing) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = 'white'; // Color del trazo
+    ctx.lineWidth = 2; // Grosor del trazo
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  const stopDrawing = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.closePath();
+    setIsDrawing(false);
+    onChange(canvas.toDataURL()); // Aquí puedes manejar la firma como necesites
+  };
+
+  return (
+    <canvas
+      ref={canvasRef}
+      onMouseDown={startDrawing}
+      onMouseMove={draw}
+      onMouseUp={stopDrawing}
+      onMouseLeave={stopDrawing}
+      style={{ width: '100%', height: '150px', backgroundColor: '#333', touchAction: 'none' }}
+    />
+  );
 };
 
 
@@ -142,12 +187,6 @@ export default function Home() {
 >
   <Input type="email" />
 </Form.Item>
-<Form.Item label="Recargo de equivalencia" name="Recargo">
-<Radio.Group>
-  <Radio value={1}>Si</Radio>
-  <Radio value={2}>No</Radio>
-</Radio.Group>
-</Form.Item>
       {/* Zona de Reparto */}
       <Form.Item label="Zona de Reparto" name="zonaReparto">
         <Input />
@@ -157,7 +196,52 @@ export default function Home() {
       <Form.Item label="Observaciones" name="observaciones">
         <Input.TextArea />
       </Form.Item>
-  
+
+<h3>Si es persona física minorista</h3>
+<Divider/>
+<Form.Item label="Recargo de equivalencia" name="Recargo">
+<Radio.Group>
+  <Radio value={1}>Si</Radio>
+  <Radio value={2}>No</Radio>
+</Radio.Group>
+</Form.Item>
+<h3>Datos del titular o administrador</h3>
+<Divider/>
+<Form.Item label="Nombre" name="NombreTitular">
+<Input />
+</Form.Item>  
+<Form.Item label="Cif" name="CifTitular">
+<Input />
+</Form.Item>  
+<Form.Item label="Cif" name="CifTitular">
+<Input />
+</Form.Item> 
+<Row gutter={16}>
+{/* Localidad */}
+<Col span={16}>
+  <Form.Item
+    name="localidadTitular"
+    label="Localidad"
+    rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
+  >
+    <Input />
+  </Form.Item>
+</Col>
+
+{/* Código Postal */}
+<Col span={8}>
+  <Form.Item
+    name="CPTitular"
+    label="CP"
+    rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
+  >
+    <Input maxLength={5} />
+  </Form.Item>
+</Col>
+</Row>
+<h3>Domicilio fiscal (si es dístinto al de reparto)</h3>
+<Divider/>
+
       {/* Banco */}
       <Form.Item label="Banco" name="banco">
       <IBANInput value={iban} onChange={(value) => setIban(value)} />
@@ -178,6 +262,12 @@ export default function Home() {
             </OptGroup>
           </Select>,
       </Form.Item>
+      <Form.Item label="Firma" name="firma">
+  <SignaturePad onChange={(signatureDataURL) => {
+    // Aquí puedes manejar el dato de la firma, por ejemplo, almacenándolo en el estado
+    console.log(signatureDataURL);
+  }} />
+</Form.Item>
            {/* Botón de envío */}
            <Form.Item wrapperCol={{ span: 
             14, offset: 8 }}>

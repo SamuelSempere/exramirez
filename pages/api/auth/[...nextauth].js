@@ -5,6 +5,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 export default NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/signin',
   },
