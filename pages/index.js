@@ -14,74 +14,66 @@ const IBANInput = ({ value = '', onChange }) => {
 };
 
 
-const SignaturePad = ({ value = '', onChange }) => {
+const SignaturePad = ({ onChange }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
-  const getTouchPos = (canvasDom, touchEvent) => {
-    const rect = canvasDom.getBoundingClientRect();
-    return {
-      x: touchEvent.touches[0].clientX - rect.left,
-      y: touchEvent.touches[0].clientY - rect.top
-    };
-  };
-
-  const startDrawing = (e) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    setIsDrawing(true);
-    if (e.type === 'mousedown') {
-      draw(e);
-    } else {
-      const touchPos = getTouchPos(canvas, e);
-      ctx.moveTo(touchPos.x, touchPos.y);
-    }
-  };
-
-  const draw = (e) => {
+  const draw = useCallback((clientX, clientY) => {
     if (!isDrawing) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = 'white'; // Color del trazo
-    ctx.lineWidth = 2; // Grosor del trazo
-
-    let x, y;
-    if (e.type === 'mousemove') {
-      x = e.clientX;
-      y = e.clientY;
-    } else {
-      const touchPos = getTouchPos(canvas, e);
-      x = touchPos.x;
-      y = touchPos.y;
-    }
-
     const rect = canvas.getBoundingClientRect();
-    ctx.lineTo(x - rect.left, y - rect.top);
+    ctx.lineTo(clientX - rect.left, clientY - rect.top);
     ctx.stroke();
-  };
+  }, [isDrawing]);
 
-  const stopDrawing = () => {
+  const startDrawing = useCallback(({ nativeEvent }) => {
     const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 2;
+    setIsDrawing(true);
+    ctx.beginPath();
+    if (nativeEvent.touches) {
+      const touch = nativeEvent.touches[0];
+      draw(touch.clientX, touch.clientY);
+    } else {
+      draw(nativeEvent.clientX, nativeEvent.clientY);
+    }
+  }, [draw]);
+
+  const continueDrawing = useCallback(({ nativeEvent }) => {
+    if (nativeEvent.touches) {
+      const touch = nativeEvent.touches[0];
+      draw(touch.clientX, touch.clientY);
+    } else {
+      draw(nativeEvent.clientX, nativeEvent.clientY);
+    }
+  }, [draw]);
+
+  const finishDrawing = useCallback(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
     ctx.closePath();
     setIsDrawing(false);
-    onChange(canvas.toDataURL()); // Manejar la firma
-  };
+    onChange(canvas.toDataURL());
+  }, [onChange]);
 
   return (
     <canvas
       ref={canvasRef}
       onMouseDown={startDrawing}
-      onMouseMove={draw}
-      onMouseUp={stopDrawing}
-      onMouseLeave={stopDrawing}
+      onMouseMove={isDrawing ? continueDrawing : null}
+      onMouseUp={finishDrawing}
+      onMouseOut={finishDrawing}
       onTouchStart={startDrawing}
-      onTouchMove={draw}
-      onTouchEnd={stopDrawing}
-      style={{ width: '100%', height: '150px', backgroundColor: '#333', touchAction: 'none' }}
+      onTouchMove={continueDrawing}
+      onTouchEnd={finishDrawing}
+      style={{ width: '100%', height: '150px', backgroundColor: '#333' }}
     />
   );
 };
+
 
 
 
