@@ -1,6 +1,6 @@
 # Dependencias
 /node_modules
-
+.next/
 # Archivos de configuración de entorno
 /.env.local
 /.env.development.local
