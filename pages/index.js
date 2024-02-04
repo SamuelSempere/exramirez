@@ -14,16 +14,29 @@ const IBANInput = ({ value = '', onChange }) => {
 };
 
 
-const SignaturePad = ({ onChange }) => {
+const SignaturePad = ({ value = '', onChange }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+
+  const getTouchPos = (canvasDom, touchEvent) => {
+    const rect = canvasDom.getBoundingClientRect();
+    return {
+      x: touchEvent.touches[0].clientX - rect.left,
+      y: touchEvent.touches[0].clientY - rect.top
+    };
+  };
 
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.beginPath();
     setIsDrawing(true);
-    draw(e);
+    if (e.type === 'mousedown') {
+      draw(e);
+    } else {
+      const touchPos = getTouchPos(canvas, e);
+      ctx.moveTo(touchPos.x, touchPos.y);
+    }
   };
 
   const draw = (e) => {
@@ -32,19 +45,27 @@ const SignaturePad = ({ onChange }) => {
     const ctx = canvas.getContext('2d');
     ctx.strokeStyle = 'white'; // Color del trazo
     ctx.lineWidth = 2; // Grosor del trazo
+
+    let x, y;
+    if (e.type === 'mousemove') {
+      x = e.clientX;
+      y = e.clientY;
+    } else {
+      const touchPos = getTouchPos(canvas, e);
+      x = touchPos.x;
+      y = touchPos.y;
+    }
+
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    ctx.lineTo(x, y);
+    ctx.lineTo(x - rect.left, y - rect.top);
     ctx.stroke();
   };
 
   const stopDrawing = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
     ctx.closePath();
     setIsDrawing(false);
-    onChange(canvas.toDataURL()); // Aquí puedes manejar la firma como necesites
+    onChange(canvas.toDataURL()); // Manejar la firma
   };
 
   return (
@@ -54,10 +75,14 @@ const SignaturePad = ({ onChange }) => {
       onMouseMove={draw}
       onMouseUp={stopDrawing}
       onMouseLeave={stopDrawing}
+      onTouchStart={startDrawing}
+      onTouchMove={draw}
+      onTouchEnd={stopDrawing}
       style={{ width: '100%', height: '150px', backgroundColor: '#333', touchAction: 'none' }}
     />
   );
 };
+
 
 
 export default function Home() {
