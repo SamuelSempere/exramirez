@@ -172,6 +172,7 @@ export default function Home() {
               <Option value="G90">90 días</Option>
             </OptGroup>
             <OptGroup label="Transferencia">
+             <Option value="T30">90 días</Option>
               <Option value="T60">60 días</Option>
               <Option value="T90">90 días</Option>
             </OptGroup>
