@@ -136,16 +136,20 @@ button:hover {
 
 /* Estilos por defecto para los placeholders */
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #bbb !important; /* Gris claro para los placeholders */
+  color: #fff !important; /* Gris claro para los placeholders */
   opacity: 1; /* Firefox */
 }
 
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: #bbb !important;
+  color: #fff !important;
 }
 
 ::-ms-input-placeholder { /* Microsoft Edge */
-  color: #bbb !important;
+  color: #fff !important;
+}
+
+.ant-select .ant-select-selection-placeholder {
+  color: white !important;
 }
 
 /* Estilos para cuando los campos están enfocados (activo) */

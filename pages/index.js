@@ -391,7 +391,12 @@ export default function Home() {
   }} />
 
 </Form.Item>
-<Form.Item name="personSelector" label="Neceista aprobación de:" rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}>
+<Form.Item 
+name="personSelector" 
+label="Neceista aprobación de:" 
+rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}
+labelCol={{ style: { color: 'white' } }}
+>
         <Select onChange={setSelectedEmail} placeholder="Selecciona una persona">
           {people.map(person => (
             <Select.Option key={person.email} value={person.email}>{person.name}</Select.Option>
