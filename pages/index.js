@@ -15,79 +15,78 @@ const IBANInput = ({ value = '', onChange }) => {
 
 
 
-const SignaturePad = ({ onChange }) => {
+export const SignaturePad = ({ onChange }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
   const setCanvasSize = () => {
     const canvas = canvasRef.current;
-    canvas.width = window.innerWidth;
-    canvas.height = 150; // Puedes ajustar la altura como necesites
+    if (canvas) {
+      // Asegurar que las dimensiones internas coincidan con las dimensiones de estilo
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
   };
 
   useEffect(() => {
     setCanvasSize();
-    const handleResize = () => {
-      setCanvasSize();
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    // Ajustar el tamaño del canvas también cuando cambie el tamaño de la ventana
+    window.addEventListener('resize', setCanvasSize);
+    return () => window.removeEventListener('resize', setCanvasSize);
   }, []);
 
-  const draw = useCallback((clientX, clientY) => {
-    if (!isDrawing) return;
+  const getCoordinates = (event) => {
+    if (!canvasRef.current) {
+      return { x: 0, y: 0 };
+    }
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
-    ctx.lineTo(clientX - rect.left, clientY - rect.top);
-    ctx.stroke();
-  }, [isDrawing]);
+    return event.touches
+      ? { x: event.touches[0].clientX - rect.left, y: event.touches[0].clientY - rect.top }
+      : { x: event.clientX - rect.left, y: event.clientY - rect.top };
+  };
 
-  const startDrawing = useCallback(({ nativeEvent }) => {
-    const { clientX, clientY } = nativeEvent.touches ? nativeEvent.touches[0] : nativeEvent;
+  const startDrawing = ({ nativeEvent }) => {
+    const { x, y } = getCoordinates(nativeEvent);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = 'white';
-    ctx.lineWidth = 2;
-    setIsDrawing(true);
     ctx.beginPath();
-    draw(clientX, clientY);
+    ctx.moveTo(x, y);
+    setIsDrawing(true);
+  };
 
-    document.body.style.overflow = 'hidden'; // Deshabilitar scroll
-  }, [draw]);
+  const draw = ({ nativeEvent }) => {
+    if (!isDrawing) return;
+    const { x, y } = getCoordinates(nativeEvent);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
 
-  const continueDrawing = useCallback(({ nativeEvent }) => {
-    const { clientX, clientY } = nativeEvent.touches ? nativeEvent.touches[0] : nativeEvent;
-    draw(clientX, clientY);
-  }, [draw]);
-
-  const finishDrawing = useCallback(() => {
+  const finishDrawing = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.closePath();
     setIsDrawing(false);
     onChange(canvas.toDataURL());
-
-    document.body.style.overflow = ''; // Habilitar scroll
-  }, [onChange]);
+  };
 
   return (
     <canvas
       ref={canvasRef}
       onMouseDown={startDrawing}
-      onMouseMove={isDrawing ? continueDrawing : null}
+      onMouseMove={draw}
       onMouseUp={finishDrawing}
       onMouseOut={finishDrawing}
       onTouchStart={startDrawing}
-      onTouchMove={continueDrawing}
+      onTouchMove={draw}
       onTouchEnd={finishDrawing}
-      style={{ width: '100%', height: '150px', backgroundColor: '#333' }}
+      style={{ width: '100%', height: '150px', touchAction: 'none',   backgroundColor: 'white' }} // Agregar touchAction: 'none' para mejorar la interacción táctil
     />
   );
 };
+
 
 
 
