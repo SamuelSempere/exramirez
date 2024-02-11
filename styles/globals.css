@@ -163,7 +163,9 @@ button:hover {
 .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
   border-color: #555 !important;
 }
-
+.sigCanvas {
+  touch-action: none;
+}
 /* Para ajustar los colores de las opciones dentro de los Select */
 .ant-select-item {
   background-color: #4f4f4f !important;
