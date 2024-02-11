@@ -71,10 +71,10 @@ const SignaturePad = () => {
         onEnd={finishDrawing}
         canvasProps={{
           className: 'sigCanvas',
-          style: { width: '500px', height: '180px', backgroundColor: 'white' }
+          style: { width: '500px', height: '200px', backgroundColor: 'white' }
         }}
       />
-      <button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>
+      <button type="button" onClick={() => sigPadRef.current.clear()}>Borrarr</button>
     </div>
   );
 };
