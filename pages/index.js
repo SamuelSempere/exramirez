@@ -1,9 +1,12 @@
 import { useSession, signIn } from "next-auth/react";
-import { useEffect } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from "next/router";
-import { Form, Input, Select, Radio, Button, Divider,Row, Col } from 'antd';
-import React, { useState, useRef, useCallback } from 'react';
+import { Form, Input, Select, Radio, Button, Divider, Row, Col } from 'antd';
 
+
+
+
+// Componente IBANInput
 const IBANInput = ({ value = '', onChange }) => {
   const handleChange = (e) => {
     let value = e.target.value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
@@ -13,12 +16,11 @@ const IBANInput = ({ value = '', onChange }) => {
   return <Input value={value} onChange={handleChange} maxLength={29} />;
 };
 
-
-
+// Componente SignaturePad
 const SignaturePad = ({ onChange }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [savedDrawing, setSavedDrawing] = useState(null); // Estado para guardar la imagen actual del canvas
+  const [savedDrawing, setSavedDrawing] = useState(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -32,7 +34,6 @@ const SignaturePad = ({ onChange }) => {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
-    // Restaurar el dibujo si existe al inicializar o cambiar el tamaño
     const context = canvas.getContext('2d');
     if (savedDrawing) {
       const image = new Image();
@@ -41,7 +42,7 @@ const SignaturePad = ({ onChange }) => {
     }
 
     return () => window.removeEventListener('resize', setCanvasSize);
-  }, [savedDrawing]); // Dependencia a savedDrawing para restaurar el dibujo
+  }, [savedDrawing]);
 
   const getCoordinates = (event) => {
     if (!canvasRef.current) return { x: 0, y: 0 };
@@ -55,8 +56,8 @@ const SignaturePad = ({ onChange }) => {
   const startDrawing = (event) => {
     event.preventDefault();
     setIsDrawing(true);
-    const ctx = canvasRef.current.getContext('2d');
     const { x, y } = getCoordinates(event);
+    const ctx = canvasRef.current.getContext('2d');
     ctx.moveTo(x, y);
     ctx.beginPath();
   };
@@ -72,10 +73,9 @@ const SignaturePad = ({ onChange }) => {
 
   const finishDrawing = () => {
     setIsDrawing(false);
-    const canvas = canvasRef.current;
-    const dataUrl = canvas.toDataURL();
-    setSavedDrawing(dataUrl); // Guarda el estado del dibujo actual
-    onChange(dataUrl); // Opcional: notificar al componente padre
+    const dataUrl = canvasRef.current.toDataURL();
+    setSavedDrawing(dataUrl);
+    onChange(dataUrl);
   };
 
   return (
@@ -93,18 +93,16 @@ const SignaturePad = ({ onChange }) => {
   );
 };
 
-
-
+// Componente principal de la página
 export default function Home() {
-
-  
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [form] = Form.useForm();
 
 
   const [iban, setIban] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
 
-  const { data: session, status } = useSession();
-  const router = useRouter();
 
   const repartoOptions = [
     "010 POL.ESPARTAL Y POL.FLORIDA",
@@ -179,7 +177,6 @@ export default function Home() {
   ].map(label => ({ label, value: label }));
 
   const { Option, OptGroup } = Select;
-  const [form] = Form.useForm();
 
   const people = [
 
@@ -190,55 +187,24 @@ export default function Home() {
     { name: 'Cristian Fernandez', email: 'cristian.fernandez.er@gmail.com' },
     // Agrega más personas según sea necesario
   ];
-  
- 
-  
-    const onFinish = (values) => {
-      // Aquí manejarías el envío de datos del formulario
-      // Incluyendo el email seleccionado
-      console.log('Form Data:', values);
-      console.log('Selected Email:', selectedEmail);
-  
-      // Aquí iría la lógica para enviar los datos por email
-      // Esto depende de cómo manejas el envío de emails (frontend, backend, etc.)
-    };
-
 
   useEffect(() => {
-    // Si la sesión no está cargada aún, no hacer nada
-    if (status === "loading") return;
-
-    // Si no hay sesión, redirigir a la página de inicio de sesión
-    if (!session) {
-      router.push('/signin');
+    if (status !== "loading" && !session) {
+      // Redirigir al usuario a iniciar sesión si no está autenticado
+      signIn();
     }
   }, [session, status, router]);
 
-  // Contenido para usuarios autenticados
-  if (session) {
-    return (
-      <Form
-      style={{
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '100%', // O el ancho que prefieras
-        padding: '0 30px', // Añade padding lateral de 30px
-        // Otras propiedades de estilo que necesites
-      }}
-    onFinish={onFinish}
-    
+  const onFinish = (values) => {
+    console.log('Form Data:', values);
+    // Aquí implementarías el envío de datos del formulario
+  };
 
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-      layout="horizontal"
-      initialValues={{
-        remember: true,
-      }}
-    >
+  if (status === "loading") return <div>Cargando...</div>;
+  if (!session) return <div>Acceso denegado</div>;
+
+  return (
+    <Form form={form} onFinish={onFinish} layout="vertical" style={{ maxWidth: '600px', margin: '0 auto' }}>
      <h1>Cliente Nuevo</h1>
      <h3>Datos del establecimiento</h3>
      <Divider/>
@@ -427,6 +393,4 @@ labelCol={{ style: { color: 'white' } }}
       
   )}
 
-  // Muestra un mensaje de carga o un componente de carga mientras se verifica la sesión
-  return <div>Cargando...</div>;
-}
+
