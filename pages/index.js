@@ -19,14 +19,15 @@ const IBANInput = ({ value = '', onChange }) => {
 const SignaturePad = () => {
   const sigPadRef = useRef(null);
 
-  /*const clear = () => {
-    sigPadRef.current.clear();
+  const clear = () => {
+   console.log('test')
+   // sigPadRef.current.clear();
   };
 
   const save = () => {
     const image = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
     console.log(image); // Aquí puedes enviar la imagen a un servidor o procesarla según necesites
-  };*/
+  };
 
   return (
     <div>
