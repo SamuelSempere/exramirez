@@ -15,61 +15,63 @@ const IBANInput = ({ value = '', onChange }) => {
 
 
 
-export const SignaturePad = ({ onChange }) => {
+const SignaturePad = ({ onChange }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
-  const setCanvasSize = () => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      // Asegurar que las dimensiones internas coincidan con las dimensiones de estilo
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-  };
-
   useEffect(() => {
+    const setCanvasSize = () => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+    };
+
     setCanvasSize();
-    // Ajustar el tamaño del canvas también cuando cambie el tamaño de la ventana
     window.addEventListener('resize', setCanvasSize);
     return () => window.removeEventListener('resize', setCanvasSize);
   }, []);
 
-  const getCoordinates = (event) => {
-    if (!canvasRef.current) {
-      return { x: 0, y: 0 };
-    }
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    return event.touches
-      ? { x: event.touches[0].clientX - rect.left, y: event.touches[0].clientY - rect.top }
-      : { x: event.clientX - rect.left, y: event.clientY - rect.top };
-  };
-
-  const startDrawing = ({ nativeEvent }) => {
-    const { x, y } = getCoordinates(nativeEvent);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.moveTo(x, y);
+  const startDrawing = (event) => {
+    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
     setIsDrawing(true);
+    const ctx = canvasRef.current.getContext('2d');
+    const { x, y } = getCoordinates(event);
+    ctx.moveTo(x, y);
+    ctx.beginPath();
   };
 
-  const draw = ({ nativeEvent }) => {
+  const draw = (event) => {
     if (!isDrawing) return;
-    const { x, y } = getCoordinates(nativeEvent);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+    const { x, y } = getCoordinates(event);
+    const ctx = canvasRef.current.getContext('2d');
     ctx.lineTo(x, y);
     ctx.stroke();
   };
 
-  const finishDrawing = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.closePath();
+  const finishDrawing = (event) => {
+    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
     setIsDrawing(false);
+    const canvas = canvasRef.current;
     onChange(canvas.toDataURL());
+  };
+
+  const getCoordinates = (event) => {
+    if (!canvasRef.current) return { x: 0, y: 0 };
+
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+
+    // Usar clientX y clientY para eventos de mouse y touches[0].clientX/Y para táctiles
+    const clientX = event.clientX || event.touches[0].clientX;
+    const clientY = event.clientY || event.touches[0].clientY;
+
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    };
   };
 
   return (
@@ -82,7 +84,7 @@ export const SignaturePad = ({ onChange }) => {
       onTouchStart={startDrawing}
       onTouchMove={draw}
       onTouchEnd={finishDrawing}
-      style={{ width: '100%', height: '150px', touchAction: 'none',   backgroundColor: 'white' }} // Agregar touchAction: 'none' para mejorar la interacción táctil
+      style={{ width: '100%', height: '200px', touchAction: 'none', backgroundColor:'white'}} // Agregar touchAction: 'none' para evitar el scroll al dibujar
     />
   );
 };
