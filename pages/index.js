@@ -18,6 +18,7 @@ const IBANInput = ({ value = '', onChange }) => {
 const SignaturePad = ({ onChange }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [savedDrawing, setSavedDrawing] = useState(null); // Estado para guardar la imagen actual del canvas
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -31,23 +32,28 @@ const SignaturePad = ({ onChange }) => {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
-    // Prevenir el comportamiento predeterminado de los eventos táctiles en el canvas para evitar el scroll
-    const preventTouch = (e) => e.preventDefault();
+    // Restaurar el dibujo si existe al inicializar o cambiar el tamaño
+    const context = canvas.getContext('2d');
+    if (savedDrawing) {
+      const image = new Image();
+      image.onload = () => context.drawImage(image, 0, 0);
+      image.src = savedDrawing;
+    }
 
-    canvas.addEventListener('touchstart', preventTouch);
-    canvas.addEventListener('touchmove', preventTouch);
-    canvas.addEventListener('touchend', preventTouch);
+    return () => window.removeEventListener('resize', setCanvasSize);
+  }, [savedDrawing]); // Dependencia a savedDrawing para restaurar el dibujo
 
-    return () => {
-      window.removeEventListener('resize', setCanvasSize);
-      canvas.removeEventListener('touchstart', preventTouch);
-      canvas.removeEventListener('touchmove', preventTouch);
-      canvas.removeEventListener('touchend', preventTouch);
-    };
-  }, []);
+  const getCoordinates = (event) => {
+    if (!canvasRef.current) return { x: 0, y: 0 };
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const clientX = event.clientX || event.touches[0].clientX;
+    const clientY = event.clientY || event.touches[0].clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  };
 
   const startDrawing = (event) => {
-    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+    event.preventDefault();
     setIsDrawing(true);
     const ctx = canvasRef.current.getContext('2d');
     const { x, y } = getCoordinates(event);
@@ -57,34 +63,19 @@ const SignaturePad = ({ onChange }) => {
 
   const draw = (event) => {
     if (!isDrawing) return;
-    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+    event.preventDefault();
     const { x, y } = getCoordinates(event);
     const ctx = canvasRef.current.getContext('2d');
     ctx.lineTo(x, y);
     ctx.stroke();
   };
 
-  const finishDrawing = (event) => {
-    event.preventDefault(); // Prevenir el comportamiento predeterminado del evento
+  const finishDrawing = () => {
     setIsDrawing(false);
     const canvas = canvasRef.current;
-    onChange(canvas.toDataURL());
-  };
-
-  const getCoordinates = (event) => {
-    if (!canvasRef.current) return { x: 0, y: 0 };
-
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-
-    // Usar clientX y clientY para eventos de mouse y touches[0].clientX/Y para táctiles
-    const clientX = event.clientX || event.touches[0].clientX;
-    const clientY = event.clientY || event.touches[0].clientY;
-
-    return {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
-    };
+    const dataUrl = canvas.toDataURL();
+    setSavedDrawing(dataUrl); // Guarda el estado del dibujo actual
+    onChange(dataUrl); // Opcional: notificar al componente padre
   };
 
   return (
@@ -97,11 +88,10 @@ const SignaturePad = ({ onChange }) => {
       onTouchStart={startDrawing}
       onTouchMove={draw}
       onTouchEnd={finishDrawing}
-      style={{ width: '100%', height: '200px', touchAction: 'none',backgroundColor:'white' }}
+      style={{ width: '100%', height: '200px', touchAction: 'none', backgroundColor: 'white' }}
     />
   );
 };
-
 
 
 
