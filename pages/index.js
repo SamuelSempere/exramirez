@@ -17,29 +17,64 @@ const IBANInput = ({ value = '', onChange }) => {
 
 // Componente SignaturePad
 const SignaturePad = () => {
+
+
+  const disableScroll = () => {
+    // Opción 1: Deshabilitar scroll en todo el documento
+    document.body.style.overflow = 'hidden';
+  
+    // Opción 2: Prevenir el evento de scroll en window (descomentar si es necesario)
+    // window.addEventListener('scroll', preventDefault, { passive: false });
+  };
+  
+  // Función para habilitar el scroll
+  const enableScroll = () => {
+    document.body.style.overflow = '';
+  
+    // Remover el manejador de eventos de window si se usó la Opción 2
+    // window.removeEventListener('scroll', preventDefault, { passive: false });
+  };
+  
+  // Función para prevenir el comportamiento por defecto (usar si se opta por la Opción 2)
+  const preventDefault = (e) => {
+    e.preventDefault();
+  };
+
+
   const sigPadRef = useRef(null);
 
   const clear = () => {
-   console.log('test')
-   // sigPadRef.current.clear();
+ sigPadRef.current.clear();
   };
 
   const save = () => {
     const image = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
     console.log(image); // Aquí puedes enviar la imagen a un servidor o procesarla según necesites
   };
+  const startDrawing = () => {
+    disableScroll();
+  };
+
+  // Llamar a enableScroll cuando el usuario termina de dibujar
+  const finishDrawing = () => {
+    const image = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
+    console.log(image); // Procesar la imagen como necesites
+    enableScroll();
+  };
 
   return (
     <div>
-    <SignatureCanvas
-    ref={sigPadRef}
-    penColor='black'
-    canvasProps={{
-      className: 'sigCanvas',
-      style: { width: '100%', height: '180px', backgroundColor: 'white' } // Ajustes de estilo directo
-    }}
-  />
-  <button type="button" onClick={clear}>Borrar</button> {/* Cambio clave aquí */}
+      <SignatureCanvas
+        ref={sigPadRef}
+        penColor='black'
+        onBegin={startDrawing}
+        onEnd={finishDrawing}
+        canvasProps={{
+          className: 'sigCanvas',
+          style: { width: '100%', height: '180px', backgroundColor: 'white' }
+        }}
+      />
+      <button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>
     </div>
   );
 };
@@ -306,7 +341,7 @@ export default function Home() {
       </Form.Item>
       Vencimiento*/}
       <Form.Item label="Firma" name="firma">
-  <SignaturePad/>
+      <SignaturePad/>
 
 </Form.Item>
 <Form.Item 
