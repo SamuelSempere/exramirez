@@ -94,30 +94,110 @@ const SignaturePad = ({ onChange }) => {
 export default function Home() {
 
   
-  const [iban, setIban] = useState('');
 
+
+  const [iban, setIban] = useState('');
+  const [selectedEmail, setSelectedEmail] = useState('');
 
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  const repartoOptions = [
+    "010 POL.ESPARTAL Y POL.FLORIDA",
+    "100 NOCT. CENTRO",
+    "101 NOCT. EXTRARADIO",
+    "102 NOCT. ELCHE",
+    "103 NOCT. PLAYAS ARENALES",
+    "103 NOCT. S.VI- VILLA- MUCHA-",
+    "104 NOCT. CAMPELLO - S. JUAN PLAYA",
+    "106 DOBLO",
+    "107 ESPECIALES",
+    "108 NOCT. VILLAFRANQUEZA",
+    "109 NOCT. MUCHAMIEL",
+    "110 NOCT. SAN J. PUEBLO",
+    "111 NOCT. SAN J. PLAYA",
+    "012 CIUDAD ASIS Y FLORIDA PORTAZGO",
+    "014 FLORIDA SUR",
+    "015 BABEL",
+    "016 BENALUA",
+    "017 SAN GABRIEL",
+    "019 CENTRO HISTORICO",
+    "020 CENTRO Y MUELLE DE LEVANTE",
+    "021 ENSANCHE ALICANTE",
+    "022 MERCADO CENTRAL",
+    "030 SAN BLAS HASTA CENTRO CP03005",
+    "031 PAU1 Y NUEVO SAN BLAS",
+    "033 LOS ANGELES",
+    "034 TOMBOLA",
+    "036 RABASA Y POLIGONO RABASA",
+    "040 ALTOZANO",
+    "042 VIRGEN DEL REMEDIO",
+    "043 COLONIA REQUENA",
+    "050 GARBINET ALTO-BAJO Y JUAN XXII",
+    "051 CAROLINAS ALTO Y BAJO",
+    "052 EL PLA, BON REPOS Y MONTEMAR",
+    "053 ALBUFERETA Y GOTETA",
+    "060 SANTA ISABEL. HAIGON",
+    "061 SAN VICENTE DEL RASPEIG",
+    "062 VERDEGAS.LA CAÑADA.MORALET",
+    "063 VILLAFRANQUEZA",
+    "064 ORGERGIA Y SANTA FAZ",
+    "065 MUCHAMIEL",
+    "066 BONALBA",
+    "067 SANT JOAN D'ALACANT",
+    "069 EL CAMPELLO,ALKABIR Y P.ESPAÑO",
+    "070 PLAYA MUCHAVISTA",
+    "071 PLAYA S.JUAN,CABO Y ALBUFERETA",
+    "072 POLIGONO VALLONGA",
+    "073 POL.ATALAYA Y PTDA.BACAROT",
+    "074 REBOLLEDO",
+    "075 AGUAMARGA",
+    "076 TORRELLANO",
+    "077 EL ALTET",
+    "078 URBANOVA",
+    "079 ARENALES DEL SOL",
+    "080 GRAN ALACANT",
+    "081 SANTA POLA",
+    "082 ISLA TABARCA",
+    "084 PARQUE INDUSTRIAL TORRELLANO",
+    "086 ELCHE ALTABIX",
+    "088 ELCHE CARRUS OESTE",
+    "090 ESTE CARRUS ELCHE",
+    "091 LA GALIA ELCHE",
+    "092 ELCHE PONT NOU",
+    "093 SECTOR V.EL ASILO Y EL CANAL",
+    "094 ELCHE PALMERAL SAN ANTON",
+    "095 RONDA SUR Y EL TRAVALO",
+    "096 RURAL ELCHE",
+    "097 CREVILLENTE",
+    "098 ASPE Y NOVELDA",
+    "099 DISTRIBUIDORES",
+  ].map(label => ({ label, value: label }));
+
   const { Option, OptGroup } = Select;
   const [form] = Form.useForm();
 
-  const onFinish = (formData) => {
-    const templateParams = {
-      from_name: "test",
-      to_name: "tres",
-      message: JSON.stringify(formData, null, 2),
-      reply_to: "test",
+  const people = [
+
+    { name: 'José Pardo', email: 'josepardovidal@gmail.com' },
+    { name: 'Fran', email: 'fran.delcasar.er@gmail.com' },
+    { name: 'Ramón', email: 'ramon.perez.er@gmail.com' },
+    { name: 'Adrián', email: 'adrian.carmona.er@gmail.com' },
+    { name: 'Cristian Fernandez', email: 'cristian.fernandez.er@gmail.com' },
+    // Agrega más personas según sea necesario
+  ];
+  
+ 
+  
+    const onFinish = (values) => {
+      // Aquí manejarías el envío de datos del formulario
+      // Incluyendo el email seleccionado
+      console.log('Form Data:', values);
+      console.log('Selected Email:', selectedEmail);
+  
+      // Aquí iría la lógica para enviar los datos por email
+      // Esto depende de cómo manejas el envío de emails (frontend, backend, etc.)
     };
-    emailjs.init('W0CE74srzWKeHTuFS');
-    emailjs.send('service_t8cio7o', 'template_d3bxq5r', templateParams)
-    .then(function(response) {
-       console.log('SUCCESS!', response.status, response.text);
-    }, function(error) {
-       console.log('FAILED...', error);
-    });
-  };
 
 
   useEffect(() => {
@@ -134,7 +214,15 @@ export default function Home() {
   if (session) {
     return (
       <Form
+      style={{
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '100%', // O el ancho que prefieras
+        padding: '0 30px', // Añade padding lateral de 30px
+        // Otras propiedades de estilo que necesites
+      }}
     onFinish={onFinish}
+    
 
       labelCol={{
         span: 8,
@@ -145,9 +233,6 @@ export default function Home() {
       layout="horizontal"
       initialValues={{
         remember: true,
-      }}
-      style={{
-        maxWidth: 600,
       }}
     >
      <h1>Cliente Nuevo</h1>
@@ -219,8 +304,12 @@ export default function Home() {
   <Input type="email" />
 </Form.Item>
       {/* Zona de Reparto */}
-      <Form.Item label="Zona de Reparto" name="zonaReparto">
-        <Input />
+      <Form.Item name="zonaReparto" label="Zona de Reparto" rules={[{ required: true, message: 'Por favor, selecciona tu zona de reparto' }]}>
+        <Select placeholder="Selecciona tu zona de reparto" optionFilterProp="children">
+          {repartoOptions.map(option => (
+            <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
+          ))}
+        </Select>
       </Form.Item>
     
       {/* Observaciones */}
@@ -301,6 +390,14 @@ export default function Home() {
   }} />
 
 </Form.Item>
+<Form.Item name="personSelector" label="Neceista aprobación de:" rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}>
+        <Select onChange={setSelectedEmail} placeholder="Selecciona una persona">
+          {people.map(person => (
+            <Select.Option key={person.email} value={person.email}>{person.name}</Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+
 
            {/* Botón de envío */}
            <Form.Item wrapperCol={{ span: 
@@ -309,8 +406,18 @@ export default function Home() {
             Enviar
             </button>
             </Form.Item>
+
+            <p className="textolegal">Información Básica de Protección de Datos.
+
+      El responsable del tratamiento de sus datos es EXCLUSIVAS RAMIREZ S.L. y tratamos la información que nos facilita con el fin de gestionar la relación con nuestros clientes y personas de contacto. La legitimación en base a la cuál tratamos sus datos es: ejecución de contrato o interés legítimo. Tiene derecho a acceder, rectificar y suprimir sus datos dirigiéndose a nuestra dirección electrónica info@exclusivasramirez.es Asimismo puede solicitar información adicional y detallada sobre Protección de Datos en la web www.exclusivasramirez.es
+      
+      EXCLUSIVAS RAMIREZ S.L., CL. Tárbena, 03008 Alicante, garantiza que la dirección de email que usted nos ha facilitado es utilizada en la forma y con las limitaciones establecidas en la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSICE).
+      
+      El contenido de este correo electrónico y sus anexos son estrictamente confidenciales. En caso de no ser usted el destinatario y haber recibido este mensaje por error, agradeceríamos que lo comunique inmediatamente al remitente, sin difundir, almacenar o copiar su contenido.</p>
       </Form>
+      
   )}
+
   // Muestra un mensaje de carga o un componente de carga mientras se verifica la sesión
   return <div>Cargando...</div>;
 }
