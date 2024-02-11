@@ -2,8 +2,7 @@ import { useSession, signIn } from "next-auth/react";
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from "next/router";
 import { Form, Input, Select, Radio, Button, Divider, Row, Col } from 'antd';
-
-
+import SignatureCanvas from 'react-signature-canvas';
 
 
 // Componente IBANInput
@@ -17,93 +16,30 @@ const IBANInput = ({ value = '', onChange }) => {
 };
 
 // Componente SignaturePad
-const SignaturePad = ({ onChange }) => {
-  const canvasRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [savedDrawing, setSavedDrawing] = useState(null);
+const SignaturePad = () => {
+  const sigPadRef = useRef(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const setCanvasSize = () => {
-      // Ajusta el tamaño del canvas al tamaño que ocupa en el DOM
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-
-    setCanvasSize();
-    // Escucha los cambios de tamaño para ajustar el tamaño del canvas
-    window.addEventListener('resize', setCanvasSize);
-
-    // Restaura el dibujo guardado si existe
-    const context = canvas.getContext('2d');
-    if (savedDrawing) {
-      const image = new Image();
-      image.onload = () => context.drawImage(image, 0, 0);
-      image.src = savedDrawing;
-    }
-
-    // Limpieza al desmontar el componente
-    return () => {
-      window.removeEventListener('resize', setCanvasSize);
-    };
-  }, [savedDrawing]); // Dependencia al estado savedDrawing
-
-  // Deshabilita el scroll en el cuerpo del documento
-  const disableScroll = () => document.body.style.overflow = 'hidden';
-  
-  // Habilita el scroll en el cuerpo del documento
-  const enableScroll = () => document.body.style.overflow = '';
-
-  const getCoordinates = (event) => {
-    if (!canvasRef.current) return { x: 0, y: 0 };
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const clientX = event.clientX || (event.touches ? event.touches[0].clientX : 0);
-    const clientY = event.clientY || (event.touches ? event.touches[0].clientY : 0);
-    return { x: clientX - rect.left, y: clientY - rect.top };
+  const clear = () => {
+    sigPadRef.current.clear();
   };
 
-  const startDrawing = (event) => {
-    event.preventDefault();
-    disableScroll(); // Deshabilita el scroll al comenzar a dibujar
-    setIsDrawing(true);
-    const { x, y } = getCoordinates(event);
-    const ctx = canvasRef.current.getContext('2d');
-    ctx.moveTo(x, y);
-    ctx.beginPath();
-  };
-
-  const draw = (event) => {
-    if (!isDrawing) return;
-    event.preventDefault();
-    const { x, y } = getCoordinates(event);
-    const ctx = canvasRef.current.getContext('2d');
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  };
-
-  const finishDrawing = () => {
-    enableScroll(); // Habilita el scroll al terminar de dibujar
-    setIsDrawing(false);
-    const dataUrl = canvasRef.current.toDataURL();
-    setSavedDrawing(dataUrl); // Guarda el estado actual del dibujo
-    onChange(dataUrl); // Llama al callback onChange con la dataURL del canvas
+  const save = () => {
+    const image = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
+    console.log(image); // Aquí puedes enviar la imagen a un servidor o procesarla según necesites
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      onMouseDown={startDrawing}
-      onMouseMove={draw}
-      onMouseUp={finishDrawing}
-      onMouseOut={finishDrawing}
-      onTouchStart={startDrawing}
-      onTouchMove={draw}
-      onTouchEnd={finishDrawing}
-      style={{ width: '100%', height: '200px', touchAction: 'none', backgroundColor: 'white' }}
-    />
+    <div>
+    <SignatureCanvas
+    ref={sigPadRef}
+    penColor='black'
+    canvasProps={{
+      className: 'sigCanvas',
+      style: { width: '100%', height: '180px', backgroundColor: 'white' } // Ajustes de estilo directo
+    }}
+  />
+      <button onClick={clear}>Limpiar</button>
+    </div>
   );
 };
 
