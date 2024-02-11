@@ -20,17 +20,30 @@ const SignaturePad = ({ onChange }) => {
   const [isDrawing, setIsDrawing] = useState(false);
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const setCanvasSize = () => {
-      const canvas = canvasRef.current;
-      if (canvas) {
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-      }
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
     };
 
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
-    return () => window.removeEventListener('resize', setCanvasSize);
+
+    // Prevenir el comportamiento predeterminado de los eventos táctiles en el canvas para evitar el scroll
+    const preventTouch = (e) => e.preventDefault();
+
+    canvas.addEventListener('touchstart', preventTouch);
+    canvas.addEventListener('touchmove', preventTouch);
+    canvas.addEventListener('touchend', preventTouch);
+
+    return () => {
+      window.removeEventListener('resize', setCanvasSize);
+      canvas.removeEventListener('touchstart', preventTouch);
+      canvas.removeEventListener('touchmove', preventTouch);
+      canvas.removeEventListener('touchend', preventTouch);
+    };
   }, []);
 
   const startDrawing = (event) => {
@@ -84,7 +97,7 @@ const SignaturePad = ({ onChange }) => {
       onTouchStart={startDrawing}
       onTouchMove={draw}
       onTouchEnd={finishDrawing}
-      style={{ width: '100%', height: '200px', touchAction: 'none', backgroundColor:'white'}} // Agregar touchAction: 'none' para evitar el scroll al dibujar
+      style={{ width: '100%', height: '150px', touchAction: 'none' }}
     />
   );
 };
