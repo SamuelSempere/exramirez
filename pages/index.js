@@ -178,7 +178,7 @@ export default function Home() {
   if (!session) return <div>Acceso denegado</div>;
 
   return (
-    <Form form={form} onFinish={onFinish} layout="vertical" style={{ maxWidth: '600px', margin: '0 auto' }}>
+    <Form form={form} onFinish={onFinish} layout="horizontal" style={{ maxWidth: '600px', margin: '0 auto' }}>
      <h1>Cliente Nuevo</h1>
      <h3>Datos del establecimiento</h3>
      <Divider/>
