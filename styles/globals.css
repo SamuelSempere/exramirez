@@ -149,7 +149,7 @@ button:hover {
 .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
   background-color: #333 !important; /* Mantener el fondo oscuro incluso para opciones seleccionadas */
 }
-h1,h2,h3 {
+h1,h2,h3, span {
 color: white;
 }
 

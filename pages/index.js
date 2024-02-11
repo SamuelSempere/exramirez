@@ -14,9 +14,28 @@ const IBANInput = ({ value = '', onChange }) => {
 };
 
 
+
 const SignaturePad = ({ onChange }) => {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+
+  const setCanvasSize = () => {
+    const canvas = canvasRef.current;
+    canvas.width = window.innerWidth;
+    canvas.height = 150; // Puedes ajustar la altura como necesites
+  };
+
+  useEffect(() => {
+    setCanvasSize();
+    const handleResize = () => {
+      setCanvasSize();
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const draw = useCallback((clientX, clientY) => {
     if (!isDrawing) return;
@@ -28,27 +47,21 @@ const SignaturePad = ({ onChange }) => {
   }, [isDrawing]);
 
   const startDrawing = useCallback(({ nativeEvent }) => {
+    const { clientX, clientY } = nativeEvent.touches ? nativeEvent.touches[0] : nativeEvent;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.strokeStyle = 'white';
     ctx.lineWidth = 2;
     setIsDrawing(true);
     ctx.beginPath();
-    if (nativeEvent.touches) {
-      const touch = nativeEvent.touches[0];
-      draw(touch.clientX, touch.clientY);
-    } else {
-      draw(nativeEvent.clientX, nativeEvent.clientY);
-    }
+    draw(clientX, clientY);
+
+    document.body.style.overflow = 'hidden'; // Deshabilitar scroll
   }, [draw]);
 
   const continueDrawing = useCallback(({ nativeEvent }) => {
-    if (nativeEvent.touches) {
-      const touch = nativeEvent.touches[0];
-      draw(touch.clientX, touch.clientY);
-    } else {
-      draw(nativeEvent.clientX, nativeEvent.clientY);
-    }
+    const { clientX, clientY } = nativeEvent.touches ? nativeEvent.touches[0] : nativeEvent;
+    draw(clientX, clientY);
   }, [draw]);
 
   const finishDrawing = useCallback(() => {
@@ -57,6 +70,8 @@ const SignaturePad = ({ onChange }) => {
     ctx.closePath();
     setIsDrawing(false);
     onChange(canvas.toDataURL());
+
+    document.body.style.overflow = ''; // Habilitar scroll
   }, [onChange]);
 
   return (
@@ -73,7 +88,6 @@ const SignaturePad = ({ onChange }) => {
     />
   );
 };
-
 
 
 
@@ -264,8 +278,8 @@ export default function Home() {
       <IBANInput value={iban} onChange={(value) => setIban(value)} />
     </Form.Item>
     
-      {/* Vencimiento */}
-      <Form.Item label="Forma de Pago" name="FormaPago">
+      {/* 
+    <Form.Item label="Forma de Pago" name="FormaPago">
             <Select defaultValue="60 días" style={{ width: 200 }}>
             <OptGroup label="Giro">
               <Option value="G30">30 días</Option>
@@ -279,12 +293,15 @@ export default function Home() {
             </OptGroup>
           </Select>,
       </Form.Item>
+      Vencimiento*/}
       <Form.Item label="Firma" name="firma">
   <SignaturePad onChange={(signatureDataURL) => {
     // Aquí puedes manejar el dato de la firma, por ejemplo, almacenándolo en el estado
     console.log(signatureDataURL);
   }} />
+
 </Form.Item>
+
            {/* Botón de envío */}
            <Form.Item wrapperCol={{ span: 
             14, offset: 8 }}>
