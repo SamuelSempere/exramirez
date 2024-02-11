@@ -17,59 +17,54 @@ const IBANInput = ({ value = '', onChange }) => {
 
 // Componente SignaturePad
 const SignaturePad = () => {
-
-
-  const disableScroll = () => {
-    // Opción 1: Deshabilitar scroll en todo el documento
-    document.body.style.overflow = 'hidden';
-  
-    // Opción 2: Prevenir el evento de scroll en window (descomentar si es necesario)
-    // window.addEventListener('scroll', preventDefault, { passive: false });
-  };
-  
-  // Función para habilitar el scroll
-  const enableScroll = () => {
-    document.body.style.overflow = '';
-  
-    // Remover el manejador de eventos de window si se usó la Opción 2
-    // window.removeEventListener('scroll', preventDefault, { passive: false });
-  };
-  
-  // Función para prevenir el comportamiento por defecto (usar si se opta por la Opción 2)
-  const preventDefault = (e) => {
-    e.preventDefault();
-  };
-
-
   const sigPadRef = useRef(null);
+  const [savedDataUrl, setSavedDataUrl] = useState(null);
 
-  const clear = () => {
- sigPadRef.current.clear();
+  // Función para guardar el estado del canvas
+  const saveCanvasState = () => {
+    if (sigPadRef.current) {
+      const dataUrl = sigPadRef.current.getCanvas().toDataURL();
+      setSavedDataUrl(dataUrl);
+    }
   };
 
-  const startDrawing = () => {
-    disableScroll();
+  // Función para restaurar el estado del canvas
+  const restoreCanvasState = () => {
+    if (sigPadRef.current && savedDataUrl) {
+      const canvas = sigPadRef.current.getCanvas();
+      const context = canvas.getContext('2d');
+      const image = new Image();
+      image.onload = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+      image.src = savedDataUrl;
+    }
   };
 
-  // Llamar a enableScroll cuando el usuario termina de dibujar
-  const finishDrawing = () => {
-    const image = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
-    enableScroll();
-  };
+  // Manejar la redimensión
+  useEffect(() => {
+    const handleResize = () => {
+      saveCanvasState();
+      // Esperar un breve momento para restaurar el estado para asegurarse de que el canvas ha sido redimensionado
+      setTimeout(restoreCanvasState, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [savedDataUrl]);
 
   return (
     <div>
       <SignatureCanvas
         ref={sigPadRef}
-        penColor='black'
-        onBegin={startDrawing}
-        onEnd={finishDrawing}
+        penColor="black"
         canvasProps={{
           className: 'sigCanvas',
-          style: { width: '400px', height: '170px', backgroundColor: 'white' }
+          style: { width: '100%', height: '180px', backgroundColor: 'white' }
         }}
       />
-{/*<button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>*/}
+      <button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>
     </div>
   );
 };
