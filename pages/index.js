@@ -305,10 +305,7 @@ export default function Home() {
       </Form.Item>
       Vencimiento*/}
       <Form.Item label="Firma" name="firma">
-  <SignaturePad onChange={(signatureDataURL) => {
-    // Aquí puedes manejar el dato de la firma, por ejemplo, almacenándolo en el estado
-    console.log(signatureDataURL);
-  }} />
+  <SignaturePad/>
 
 </Form.Item>
 <Form.Item 
