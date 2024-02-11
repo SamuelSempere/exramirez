@@ -333,7 +333,7 @@ export default function Home() {
 </Form.Item>
 <Form.Item 
 name="personSelector" 
-label="Neceista aprobación de:" 
+label="Necesita aprobación de:" 
 rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}
 labelCol={{ style: { color: 'white' } }}
 >
