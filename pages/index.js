@@ -97,7 +97,7 @@ const SignaturePad = ({ onChange }) => {
       onTouchStart={startDrawing}
       onTouchMove={draw}
       onTouchEnd={finishDrawing}
-      style={{ width: '100%', height: '150px', touchAction: 'none' }}
+      style={{ width: '100%', height: '200px', touchAction: 'none',backgroundColor:'white' }}
     />
   );
 };
