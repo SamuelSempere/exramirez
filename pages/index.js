@@ -38,7 +38,7 @@ const SignaturePad = () => {
       style: { width: '100%', height: '180px', backgroundColor: 'white' } // Ajustes de estilo directo
     }}
   />
-      <button onClick={clear}>Limpiar</button>
+  <button type="button" onClick={clear}>Borrar</button> {/* Cambio clave aquí */}
     </div>
   );
 };
