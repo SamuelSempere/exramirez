@@ -47,10 +47,6 @@ const SignaturePad = () => {
  sigPadRef.current.clear();
   };
 
-  const save = () => {
-    const image = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
-    console.log(image); // Aquí puedes enviar la imagen a un servidor o procesarla según necesites
-  };
   const startDrawing = () => {
     disableScroll();
   };
@@ -58,7 +54,6 @@ const SignaturePad = () => {
   // Llamar a enableScroll cuando el usuario termina de dibujar
   const finishDrawing = () => {
     const image = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
-    console.log(image); // Procesar la imagen como necesites
     enableScroll();
   };
 
@@ -71,10 +66,10 @@ const SignaturePad = () => {
         onEnd={finishDrawing}
         canvasProps={{
           className: 'sigCanvas',
-          style: { width: '300px', height: '170px', backgroundColor: 'white' }
+          style: { width: '400px', height: '170px', backgroundColor: 'white' }
         }}
       />
-{/*<button type="button" onClick={() => sigPadRef.current.clear()}>Borrarr</button>*/}
+{/*<button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>*/}
     </div>
   );
 };
@@ -85,11 +80,8 @@ export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [form] = Form.useForm();
-
-
   const [iban, setIban] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
-
 
   const repartoOptions = [
     "010 POL.ESPARTAL Y POL.FLORIDA",
