@@ -29,21 +29,6 @@ export const SignaturePad = () => {
   };
 
   // Función para restaurar el estado del canvas
-  const restoreSignature = () => {
-    if (sigPadRef.current && signatureDataUrl) {
-      const canvas = sigPadRef.current.getCanvas();
-      const ctx = canvas.getContext('2d');
-      const image = new Image();
-      image.onload = () => {
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-      };
-      image.src = signatureDataUrl;
-    }
-  };
-
-  useEffect(() => {
-    restoreSignature();
-  }, [signatureDataUrl]);
 
   return (
     <div>
