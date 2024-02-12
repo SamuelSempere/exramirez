@@ -37,7 +37,7 @@ export const SignaturePad = () => {
         penColor="white"
         onEnd={saveSignature}
         canvasProps={{
-          width: 500,
+          width: 400,
           height: 200,
           className: 'sigCanvas',
           style: { border: '1px solid #ffffff' }
