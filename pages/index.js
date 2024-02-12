@@ -17,26 +17,45 @@ const IBANInput = ({ value = '', onChange }) => {
 
 // Componente SignaturePad
 export const SignaturePad = () => {
+  const [signatureDataUrl, setSignatureDataUrl] = useState('');
   const sigPadRef = useRef(null);
 
-  // Prevenir el scroll al interactuar con el canvas
-  const preventTouchScroll = (event) => {
-    event.preventDefault();
+  // Función para guardar el estado del canvas
+  const saveSignature = () => {
+    if (sigPadRef.current) {
+      const dataUrl = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
+      setSignatureDataUrl(dataUrl);
+    }
   };
 
+  // Función para restaurar el estado del canvas
+  const restoreSignature = () => {
+    if (sigPadRef.current && signatureDataUrl) {
+      const canvas = sigPadRef.current.getCanvas();
+      const ctx = canvas.getContext('2d');
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
+      image.src = signatureDataUrl;
+    }
+  };
+
+  useEffect(() => {
+    restoreSignature();
+  }, [signatureDataUrl]);
+
   return (
-    <div
-      onTouchStart={preventTouchScroll}
-      onTouchMove={preventTouchScroll}
-      onTouchEnd={(e) => e.stopPropagation()} // Detiene la propagación pero no previene el comportamiento por defecto
-      style={{ touchAction: 'none' }} // CSS para mejorar la interacción táctil en algunos navegadores
-    >
+    <div>
       <SignatureCanvas
         ref={sigPadRef}
-        penColor='black'
+        penColor="white"
+        onEnd={saveSignature}
         canvasProps={{
+          width: 500,
+          height: 200,
           className: 'sigCanvas',
-          style: { width: '100%', height: '200px', backgroundColor: 'white' }
+          style: { border: '1px solid #ffffff' }
         }}
       />
       <button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>
