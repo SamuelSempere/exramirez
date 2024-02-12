@@ -16,52 +16,27 @@ const IBANInput = ({ value = '', onChange }) => {
 };
 
 // Componente SignaturePad
-const SignaturePad = () => {
+export const SignaturePad = () => {
   const sigPadRef = useRef(null);
-  const [savedDataUrl, setSavedDataUrl] = useState(null);
 
-  // Función para guardar el estado del canvas
-  const saveCanvasState = () => {
-    if (sigPadRef.current) {
-      const dataUrl = sigPadRef.current.getCanvas().toDataURL();
-      setSavedDataUrl(dataUrl);
-    }
+  // Prevenir el scroll al interactuar con el canvas
+  const preventTouchScroll = (event) => {
+    event.preventDefault();
   };
-
-  // Función para restaurar el estado del canvas
-  const restoreCanvasState = () => {
-    if (sigPadRef.current && savedDataUrl) {
-      const canvas = sigPadRef.current.getCanvas();
-      const context = canvas.getContext('2d');
-      const image = new Image();
-      image.onload = () => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      };
-      image.src = savedDataUrl;
-    }
-  };
-
-  // Manejar la redimensión
-  useEffect(() => {
-    const handleResize = () => {
-      saveCanvasState();
-      // Esperar un breve momento para restaurar el estado para asegurarse de que el canvas ha sido redimensionado
-      setTimeout(restoreCanvasState, 150);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [savedDataUrl]);
 
   return (
-    <div>
+    <div
+      onTouchStart={preventTouchScroll}
+      onTouchMove={preventTouchScroll}
+      onTouchEnd={(e) => e.stopPropagation()} // Detiene la propagación pero no previene el comportamiento por defecto
+      style={{ touchAction: 'none' }} // CSS para mejorar la interacción táctil en algunos navegadores
+    >
       <SignatureCanvas
         ref={sigPadRef}
-        penColor="black"
+        penColor='black'
         canvasProps={{
           className: 'sigCanvas',
-          style: { width: '100%', height: '180px', backgroundColor: 'white' }
+          style: { width: '100%', height: '200px', backgroundColor: 'white' }
         }}
       />
       <button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>
