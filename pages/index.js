@@ -153,9 +153,24 @@ export default function Home() {
     }
   }, [session, status, router]);
 
-  const onFinish = (values) => {
-    console.log('Form Data:', values);
-    // Aquí implementarías el envío de datos del formulario
+  const onFinish = async (values) => {
+    try {
+      const response = await fetch('/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+  
+      if (!response.ok) throw new Error('Error al enviar el correo');
+      const data = await response.text();
+      console.log(data); // "Correo enviado con éxito"
+      alert('Correo enviado con éxito');
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      alert('Error al enviar el correo');
+    }
   };
 
   if (status === "loading") return <div>Cargando...</div>;
@@ -168,25 +183,25 @@ export default function Home() {
       <Divider />
       {/* Nombre Comercial */}
       <Form.Item label="Nombre Comercial" name="nombreComercial"
-        rules={[{ required: true, message: 'Por favor ingresa el nombre' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa el nombre' }]}>
         <Input />
       </Form.Item>
 
       {/* Nombre Fiscal */}
       <Form.Item label="Nombre Fiscal" name="nombreFiscal"
-        rules={[{ required: true, message: 'Por favor ingresa tu el nombre' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa tu el nombre' }]}>
         <Input />
       </Form.Item>
 
       {/* CIF/DNI */}
       <Form.Item label="CIF/DNI" name="cifDni"
-        rules={[{ required: true, message: 'Por favor ingresa el DNI/CIF' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa el DNI/CIF' }]}>
         <Input />
       </Form.Item>
 
       {/* Calle y Número */}
       <Form.Item label="Calle y N°" name="calleNumero"
-        rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa calle y número' }]}>
         <Input />
       </Form.Item> {/* Localidad y Código Postal */}
       <Row gutter={16}>
@@ -195,7 +210,7 @@ export default function Home() {
           <Form.Item
             name="localidad"
             label="Localidad"
-            rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
+            rules={[{ required: false, message: 'Por favor ingresa tu localidad' }]}
           >
             <Input />
           </Form.Item>
@@ -206,7 +221,7 @@ export default function Home() {
           <Form.Item
             name="CP"
             label="CP"
-            rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
+            rules={[{ required: false, message: 'Por favor ingresa tu código postal' }]}
           >
             <Input maxLength={5} />
           </Form.Item>
@@ -215,7 +230,7 @@ export default function Home() {
 
       {/* Persona de Contacto y Teléfonos */}
       <Form.Item label="Persona de Contacto y Teléfonos" name="personaContactoTelefonos"
-        rules={[{ required: true, message: 'Por favor ingresa telefono' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa telefono' }]}>
         <Input />
       </Form.Item>
 
@@ -225,7 +240,7 @@ export default function Home() {
         name="correoElectronico"
         rules={[
           {
-            required: true,
+            required: false,
             message: 'Por favor ingresa tu correo electrónico',
           },
           {
@@ -237,7 +252,7 @@ export default function Home() {
         <Input type="email" />
       </Form.Item>
       {/* Zona de Reparto */}
-      <Form.Item name="zonaReparto" label="Zona de Reparto" rules={[{ required: true, message: 'Por favor, selecciona tu zona de reparto' }]}>
+      <Form.Item name="zonaReparto" label="Zona de Reparto" rules={[{ required: false, message: 'Por favor, selecciona tu zona de reparto' }]}>
         <Select placeholder="Selecciona tu zona de reparto" optionFilterProp="children">
           {repartoOptions.map(option => (
             <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
@@ -273,15 +288,15 @@ export default function Home() {
       <h3>Datos del titular o administrador</h3>
       <Divider />
       <Form.Item label="Nombre" name="NombreTitular"
-        rules={[{ required: true, message: 'Por favor ingresa el nombre' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa el nombre' }]}>
         <Input />
       </Form.Item>
       <Form.Item label="Cif" name="CifTitular"
-        rules={[{ required: true, message: 'Por favor ingresa el Cif' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa el Cif' }]}>
         <Input />
       </Form.Item>
         <Form.Item label="Calle y N°" name="calleNumeroTitular"
-          rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
+          rules={[{ required: false, message: 'Por favor ingresa calle y número' }]}>
           <Input />
         </Form.Item>
         <Row gutter={16}>
@@ -290,7 +305,7 @@ export default function Home() {
             <Form.Item
               name="localidadTitular"
               label="Localidad"
-              rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
+              rules={[{ required: false, message: 'Por favor ingresa tu localidad' }]}
             >
               <Input />
             </Form.Item>
@@ -301,7 +316,7 @@ export default function Home() {
             <Form.Item
               name="CPTitular"
               label="CP"
-              rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
+              rules={[{ required: false, message: 'Por favor ingresa tu código postal' }]}
             >
               <Input maxLength={5} />
             </Form.Item>
@@ -338,7 +353,7 @@ export default function Home() {
       </Row>
         <Form.Item label="Forma de pago" name="FormaPago">
          <Input defaultValue='Reposición 5 días' 
-         rules={[{ required: true, message: 'Necesita forma de pago' }]}
+         rules={[{ required: false, message: 'Necesita forma de pago' }]}
          />
         </Form.Item>
         <Divider></Divider>
@@ -349,7 +364,7 @@ export default function Home() {
         <Form.Item
           name="personSelector"
           label="Necesita aprobación de:"
-          rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}
+          rules={[{ required: false, message: 'Por favor, selecciona una persona' }]}
           labelCol={{ style: { color: 'white' } }}
         >
           <Select onChange={setSelectedEmail} placeholder="Selecciona una persona">
