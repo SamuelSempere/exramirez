@@ -1,9 +1,8 @@
 import { useSession, signIn } from "next-auth/react";
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from "next/router";
-import { Form, Input, Select, Radio, Button, Divider, Row, Col } from 'antd';
+import { Form, Input, Select, Radio, Button, Divider, Row, Col,TimePicker  } from 'antd';
 import SignatureCanvas from 'react-signature-canvas';
-
 
 // Componente IBANInput
 const IBANInput = ({ value = '', onChange }) => {
@@ -37,13 +36,14 @@ export const SignaturePad = () => {
         penColor="white"
         onEnd={saveSignature}
         canvasProps={{
-          width: 400,
+          width: 310,
           height: 200,
           className: 'sigCanvas',
           style: { border: '1px solid #ffffff' }
         }}
       />
-      <button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button>
+      <div><button type="button" onClick={() => sigPadRef.current.clear()}>Borrar</button></div>
+      
     </div>
   );
 };
@@ -130,6 +130,11 @@ export default function Home() {
   ].map(label => ({ label, value: label }));
 
   const { Option, OptGroup } = Select;
+  const format = 'HH:mm'; // Define el formato de hora deseado
+
+  function onChange(time, timeString) {
+    console.log(time, timeString); // Acciones a realizar cuando el tiempo cambie
+  }
 
   const people = [
 
@@ -158,74 +163,79 @@ export default function Home() {
 
   return (
     <Form form={form} onFinish={onFinish} layout="horizontal" style={{ maxWidth: '600px', margin: '0 auto' }}>
-     <h1>Cliente Nuevo</h1>
-     <h3>Datos del establecimiento</h3>
-     <Divider/>
+      <h1>Cliente Nuevo</h1>
+      <h3>Datos del establecimiento</h3>
+      <Divider />
       {/* Nombre Comercial */}
-      <Form.Item label="Nombre Comercial" name="nombreComercial">
+      <Form.Item label="Nombre Comercial" name="nombreComercial"
+        rules={[{ required: true, message: 'Por favor ingresa el nombre' }]}>
         <Input />
       </Form.Item>
 
       {/* Nombre Fiscal */}
-      <Form.Item label="Nombre Fiscal" name="nombreFiscal">
+      <Form.Item label="Nombre Fiscal" name="nombreFiscal"
+        rules={[{ required: true, message: 'Por favor ingresa tu el nombre' }]}>
         <Input />
       </Form.Item>
 
       {/* CIF/DNI */}
-      <Form.Item label="CIF/DNI" name="cifDni">
+      <Form.Item label="CIF/DNI" name="cifDni"
+        rules={[{ required: true, message: 'Por favor ingresa el DNI/CIF' }]}>
         <Input />
       </Form.Item>
- 
+
       {/* Calle y Número */}
-      <Form.Item label="Calle y N°" name="calleNumero">
-      <Input />
+      <Form.Item label="Calle y N°" name="calleNumero"
+        rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
+        <Input />
       </Form.Item> {/* Localidad y Código Postal */}
       <Row gutter={16}>
-  {/* Localidad */}
-  <Col span={16}>
-    <Form.Item
-      name="localidad"
-      label="Localidad"
-      rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
-    >
-      <Input />
-    </Form.Item>
-  </Col>
+        {/* Localidad */}
+        <Col span={16}>
+          <Form.Item
+            name="localidad"
+            label="Localidad"
+            rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
 
-  {/* Código Postal */}
-  <Col span={8}>
-    <Form.Item
-      name="CP"
-      label="CP"
-      rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
-    >
-      <Input maxLength={5} />
-    </Form.Item>
-  </Col>
-</Row>
-    
+        {/* Código Postal */}
+        <Col span={8}>
+          <Form.Item
+            name="CP"
+            label="CP"
+            rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
+          >
+            <Input maxLength={5} />
+          </Form.Item>
+        </Col>
+      </Row>
+
       {/* Persona de Contacto y Teléfonos */}
-      <Form.Item label="Persona de Contacto y Teléfonos" name="personaContactoTelefonos">
+      <Form.Item label="Persona de Contacto y Teléfonos" name="personaContactoTelefonos"
+        rules={[{ required: true, message: 'Por favor ingresa telefono' }]}>
         <Input />
       </Form.Item>
-    
+
       {/* Correo Electrónico */}
       <Form.Item
-  label="Correo Electrónico"
-  name="correoElectronico"
-  rules={[
-    {
-      required: true,
-      message: 'Por favor ingresa tu correo electrónico',
-    },
-    {
-      type: 'email',
-      message: 'El correo electrónico no es válido',
-    },
-  ]}
->
-  <Input type="email" />
-</Form.Item>
+        label="Correo Electrónico"
+        name="correoElectronico"
+        rules={[
+          {
+            required: true,
+            message: 'Por favor ingresa tu correo electrónico',
+          },
+          {
+            type: 'email',
+            message: 'El correo electrónico no es válido',
+          },
+        ]}
+      >
+        <Input type="email" />
+      </Form.Item>
       {/* Zona de Reparto */}
       <Form.Item name="zonaReparto" label="Zona de Reparto" rules={[{ required: true, message: 'Por favor, selecciona tu zona de reparto' }]}>
         <Select placeholder="Selecciona tu zona de reparto" optionFilterProp="children">
@@ -234,113 +244,137 @@ export default function Home() {
           ))}
         </Select>
       </Form.Item>
-    
+
       {/* Observaciones */}
-      <Form.Item label="Observaciones" name="observaciones">
-        <Input.TextArea />
+      <Form.Item label="Horario de entrega" name="hentrega">
+      <Input/>
       </Form.Item>
-
-<h3>Si es persona física minorista</h3>
-<Divider/>
-<Form.Item label="Recargo de equivalencia" name="Recargo">
-<Radio.Group>
-  <Radio value={1}>Si</Radio>
-  <Radio value={2}>No</Radio>
-</Radio.Group>
-</Form.Item>
-<h3>Datos del titular o administrador</h3>
-<Divider/>
-<Form.Item label="Nombre" name="NombreTitular">
-<Input />
-</Form.Item>  
-<Form.Item label="Cif" name="CifTitular">
-<Input />
-</Form.Item>  
-<Form.Item label="Cif" name="CifTitular">
-<Input />
-</Form.Item> 
-<Row gutter={16}>
-{/* Localidad */}
-<Col span={16}>
-  <Form.Item
-    name="localidadTitular"
-    label="Localidad"
-    rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
-  >
-    <Input />
-  </Form.Item>
-</Col>
-
-{/* Código Postal */}
-<Col span={8}>
-  <Form.Item
-    name="CPTitular"
-    label="CP"
-    rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
-  >
-    <Input maxLength={5} />
-  </Form.Item>
-</Col>
-</Row>
-<h3>Domicilio fiscal (si es dístinto al de reparto)</h3>
-<Divider/>
-
-      {/* Banco */}
-      <Form.Item label="Banco" name="banco">
-      <IBANInput value={iban} onChange={(value) => setIban(value)} />
+      <Form.Item label="Dia de visita" name="DiaVisita">
+      <Select placeholder="Dia de de la semana">
+              <Select.Option key='Lunes'>Lunes</Select.Option>
+              <Select.Option key='Martes'>Martes</Select.Option>
+              <Select.Option key='Miercoles'>Miercoles</Select.Option>
+              <Select.Option key='Jueves'>Jueves</Select.Option>
+              <Select.Option key='Viernes'>Viernes</Select.Option>
+      </Select>
     </Form.Item>
-    
-      {/* 
-    <Form.Item label="Forma de Pago" name="FormaPago">
-            <Select defaultValue="60 días" style={{ width: 200 }}>
-            <OptGroup label="Giro">
-              <Option value="G30">30 días</Option>
-              <Option value="G60">60 días</Option>
-              <Option value="G90">90 días</Option>
-            </OptGroup>
-            <OptGroup label="Transferencia">
-             <Option value="T30">90 días</Option>
-              <Option value="T60">60 días</Option>
-              <Option value="T90">90 días</Option>
-            </OptGroup>
-          </Select>,
+    <Form.Item label="Detras de..." name="Detrasde">
+    <Input/>
+    </Form.Item>
+
+      <h3>Si es persona física minorista</h3>
+      <Divider />
+      <Form.Item label="Recargo de equivalencia" name="Recargo">
+        <Radio.Group>
+          <Radio value={1}>Si</Radio>
+          <Radio value={2}>No</Radio>
+        </Radio.Group>
       </Form.Item>
-      Vencimiento*/}
-      <Form.Item label="Firma" name="firma">
-      <SignaturePad/>
-
-</Form.Item>
-<Form.Item 
-name="personSelector" 
-label="Necesita aprobación de:" 
-rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}
-labelCol={{ style: { color: 'white' } }}
->
-        <Select onChange={setSelectedEmail} placeholder="Selecciona una persona">
-          {people.map(person => (
-            <Select.Option key={person.email} value={person.email}>{person.name}</Select.Option>
-          ))}
-        </Select>
+      <h3>Datos del titular o administrador</h3>
+      <Divider />
+      <Form.Item label="Nombre" name="NombreTitular"
+        rules={[{ required: true, message: 'Por favor ingresa el nombre' }]}>
+        <Input />
       </Form.Item>
-
-
-           {/* Botón de envío */}
-           <Form.Item wrapperCol={{ span: 
-            14, offset: 8 }}>
-            <button>
-            Enviar
-            </button>
+      <Form.Item label="Cif" name="CifTitular"
+        rules={[{ required: true, message: 'Por favor ingresa el Cif' }]}>
+        <Input />
+      </Form.Item>
+        <Form.Item label="Calle y N°" name="calleNumeroTitular"
+          rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
+          <Input />
+        </Form.Item>
+        <Row gutter={16}>
+          {/* Localidad */}
+          <Col span={16}>
+            <Form.Item
+              name="localidadTitular"
+              label="Localidad"
+              rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
+            >
+              <Input />
             </Form.Item>
+          </Col>
 
-            <p className="textolegal">Información Básica de Protección de Datos.
+          {/* Código Postal */}
+          <Col span={8}>
+            <Form.Item
+              name="CPTitular"
+              label="CP"
+              rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
+            >
+              <Input maxLength={5} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <h3>Domicilio fiscal (si es dístinto al de reparto)</h3>
+        <Divider />
+        <Form.Item label="Calle y N°" name="calleNumeroFiscal"
+        rules={[{ required: false, message: 'Por favor ingresa calle y número' }]}>
+        <Input />
+      </Form.Item>
+      <Row gutter={16}>
+        {/* Localidad */}
+        <Col span={16}>
+          <Form.Item
+            name="localidadFiscal"
+            label="Localidad"
+            rules={[{ required: false, message: 'Por favor ingresa tu localidad' }]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
 
-      El responsable del tratamiento de sus datos es EXCLUSIVAS RAMIREZ S.L. y tratamos la información que nos facilita con el fin de gestionar la relación con nuestros clientes y personas de contacto. La legitimación en base a la cuál tratamos sus datos es: ejecución de contrato o interés legítimo. Tiene derecho a acceder, rectificar y suprimir sus datos dirigiéndose a nuestra dirección electrónica info@exclusivasramirez.es Asimismo puede solicitar información adicional y detallada sobre Protección de Datos en la web www.exclusivasramirez.es
-      
-      EXCLUSIVAS RAMIREZ S.L., CL. Tárbena, 03008 Alicante, garantiza que la dirección de email que usted nos ha facilitado es utilizada en la forma y con las limitaciones establecidas en la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSICE).
-      
-      El contenido de este correo electrónico y sus anexos son estrictamente confidenciales. En caso de no ser usted el destinatario y haber recibido este mensaje por error, agradeceríamos que lo comunique inmediatamente al remitente, sin difundir, almacenar o copiar su contenido.</p>
-      </Form>
-      
-  )}
+        {/* Código Postal */}
+        <Col span={8}>
+          <Form.Item
+            name="CPfiscal"
+            label="CP"
+            rules={[{ required: false, message: 'Por favor ingresa tu código postal' }]}
+          >
+            <Input maxLength={5} />
+          </Form.Item>
+        </Col>
+      </Row>
+        <Form.Item label="Forma de pago" name="FormaPago">
+         <Input defaultValue='Reposición 5 días' 
+         rules={[{ required: true, message: 'Necesita forma de pago' }]}
+         />
+        </Form.Item>
+        <Divider></Divider>
+        <Form.Item label="Firma" name="firma">
+          <SignaturePad />
+
+        </Form.Item>
+        <Form.Item
+          name="personSelector"
+          label="Necesita aprobación de:"
+          rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}
+          labelCol={{ style: { color: 'white' } }}
+        >
+          <Select onChange={setSelectedEmail} placeholder="Selecciona una persona">
+            {people.map(person => (
+              <Select.Option key={person.email} value={person.email}>{person.name}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+
+        {/* Botón de envío */}
+        <Form.Item>
+          <button>
+            Enviar
+          </button>
+        </Form.Item>
+
+        <p className="textolegal">
+        Información Básica de Protección de Datos.El responsable del tratamiento de sus datos es EXCLUSIVAS RAMIREZ S.L. y tratamos la información que nos facilita con el fin de gestionar la relación con nuestros clientes y personas de contacto. La legitimación en base a la cuál tratamos sus datos es: ejecución de contrato o interés legítimo. Tiene derecho a acceder, rectificar y suprimir sus datos dirigiéndose a nuestra dirección electrónica info@exclusivasramirez.es Asimismo puede solicitar información adicional y detallada sobre Protección de Datos en la web www.exclusivasramirez.es
+          EXCLUSIVAS RAMIREZ S.L., CL. Tárbena, 03008 Alicante, garantiza que la dirección de email que usted nos ha facilitado es utilizada en la forma y con las limitaciones establecidas en la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSICE).
+          El contenido de este correo electrónico y sus anexos son estrictamente confidenciales. En caso de no ser usted el destinatario y haber recibido este mensaje por error, agradeceríamos que lo comunique inmediatamente al remitente, sin difundir, almacenar o copiar su contenido.
+        </p>
+    </Form>
+
+  )
+}
 
 
