@@ -10,13 +10,14 @@ export default async (req, res) => {
     secure: false, // true para 465, false para otros puertos
     auth: {
       user: 'altaclientes@exclusivasramirez.es', // tu dirección de correo
-      pass: process.env.EMAIL_PASS, // contraseña del correo
+      //pass: process.env.EMAIL_PASS, // contraseña del correo
+      pass: 'ERmage83ese@'
     },
   });
 
   // Opciones del correo
   let mailOptions = {
-    from: 'altacientes@exclusivasramirez.es',
+    from: 'altaclientes@exclusivasramirez.es',
     to: selectedEmail, // Usar el email seleccionado como destinatario
     subject: `Datos alta nuevo cleinte de ${username}`,
     text: JSON.stringify(restOfBody, null, 2),
