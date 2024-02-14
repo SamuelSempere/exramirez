@@ -11,7 +11,6 @@ export default async (req, res) => {
             calleNumero, localidad, CP, personaContactoTelefonos, correoElectronico,
             zonaReparto, formaPago, diaVisita, detrasDe, observaciones
         } = data;
-    
         return `
             <html>
             <head>

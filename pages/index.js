@@ -152,6 +152,7 @@ const [messageColor, setMessageColor] = useState('');
     };
   
     try {
+      console.log(dataToSend)
       const response = await fetch('/api/sendEmail', {
         method: 'POST',
         headers: {
