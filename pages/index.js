@@ -130,20 +130,19 @@ export default function Home() {
   ].map(label => ({ label, value: label }));
 
   const { Option, OptGroup } = Select;
-  const format = 'HH:mm'; // Define el formato de hora deseado
 
-  function onChange(time, timeString) {
-    console.log(time, timeString); // Acciones a realizar cuando el tiempo cambie
-  }
+  const username = session?.user?.username || session?.user?.email;
 
   const people = [
 
-    { name: 'José Pardo', email: 'josepardovidal@gmail.com' },
-    { name: 'Fran', email: 'fran.delcasar.er@gmail.com' },
+    { name: 'José Pardo', email: 'chempe@gmail.com' },
+    { name: 'Fran', email: 'chempe@hotmail.com' },
     { name: 'Ramón', email: 'ramon.perez.er@gmail.com' },
     { name: 'Adrián', email: 'adrian.carmona.er@gmail.com' },
     { name: 'Cristian Fernandez', email: 'cristian.fernandez.er@gmail.com' },
+    
     // Agrega más personas según sea necesario
+
   ];
 
   useEffect(() => {
@@ -154,18 +153,22 @@ export default function Home() {
   }, [session, status, router]);
 
   const onFinish = async (values) => {
+    const dataToSend = {
+      ...values,
+      selectedEmail,
+      username, // Asegúrate de que este es el estado actualizado con el email seleccionado
+    };
+  
     try {
       const response = await fetch('/api/sendEmail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(dataToSend),
       });
   
       if (!response.ok) throw new Error('Error al enviar el correo');
-      const data = await response.text();
-      console.log(data); // "Correo enviado con éxito"
       alert('Correo enviado con éxito');
     } catch (error) {
       console.error('Error al enviar formulario:', error);
