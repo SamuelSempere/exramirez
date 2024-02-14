@@ -10,7 +10,7 @@ export default async (req, res) => {
     secure: false, // true para 465, false para otros puertos
     auth: {
       user: 'altaclientes@exclusivasramirez.es', // tu dirección de correo
-      pass: 'ERmage83ese@', // contraseña del correo
+      pass: process.env.EMAIL_PASS, // contraseña del correo
     },
   });
 
