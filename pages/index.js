@@ -4,26 +4,14 @@ import { useRouter } from "next/router";
 import { Form, Input, Select, Radio, Button, Divider, Row, Col,TimePicker  } from 'antd';
 import SignatureCanvas from 'react-signature-canvas';
 
-// Componente IBANInput
-const IBANInput = ({ value = '', onChange }) => {
-  const handleChange = (e) => {
-    let value = e.target.value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim();
-    onChange(value);
-  };
-
-  return <Input value={value} onChange={handleChange} maxLength={29} />;
-};
-
 // Componente SignaturePad
-export const SignaturePad = () => {
-  const [signatureDataUrl, setSignatureDataUrl] = useState('');
+const SignaturePad = ({ setSignatureDataUrl }) => {
   const sigPadRef = useRef(null);
 
-  // Función para guardar el estado del canvas
   const saveSignature = () => {
     if (sigPadRef.current) {
       const dataUrl = sigPadRef.current.getTrimmedCanvas().toDataURL('image/png');
-      setSignatureDataUrl(dataUrl);
+      setSignatureDataUrl(dataUrl); // Usando directamente después de la desestructuración
     }
   };
 
@@ -51,11 +39,15 @@ export const SignaturePad = () => {
 
 // Componente principal de la página
 export default function Home() {
+  const [message, setMessage] = useState('');
+const [messageColor, setMessageColor] = useState('');
   const { data: session, status } = useSession();
   const router = useRouter();
   const [form] = Form.useForm();
   const [iban, setIban] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
+  const [signatureDataUrl, setSignatureDataUrl] = useState('');
+
 
   const repartoOptions = [
     "010 POL.ESPARTAL Y POL.FLORIDA",
@@ -156,7 +148,7 @@ export default function Home() {
     const dataToSend = {
       ...values,
       selectedEmail,
-      username, // Asegúrate de que este es el estado actualizado con el email seleccionado
+      signatureDataUrl,  // Asegúrate de incluir la firma
     };
   
     try {
@@ -169,10 +161,12 @@ export default function Home() {
       });
   
       if (!response.ok) throw new Error('Error al enviar el correo');
-      alert('Correo enviado con éxito');
+      setMessage('Datos enviados correctamente');
+      setMessageColor('green'); // Establece el color del mensaje a verde
     } catch (error) {
       console.error('Error al enviar formulario:', error);
-      alert('Error al enviar el correo');
+      setMessage('Ha ocurrido un error');
+      setMessageColor('red'); // Establece el color del mensaje a rojo
     }
   };
 
@@ -361,7 +355,7 @@ export default function Home() {
         </Form.Item>
         <Divider></Divider>
         <Form.Item label="Firma" name="firma">
-          <SignaturePad />
+        <SignaturePad setSignatureDataUrl={setSignatureDataUrl} />
 
         </Form.Item>
         <Form.Item
@@ -380,10 +374,13 @@ export default function Home() {
 
         {/* Botón de envío */}
         <Form.Item>
-          <button>
-            Enviar
-          </button>
-        </Form.Item>
+        <button type="submit">Enviar</button>
+        {message && (
+          <span style={{ marginLeft: '10px', color: messageColor }}>
+            {message}
+          </span>
+        )}
+      </Form.Item>
 
         <p className="textolegal">
         Información Básica de Protección de Datos.El responsable del tratamiento de sus datos es EXCLUSIVAS RAMIREZ S.L. y tratamos la información que nos facilita con el fin de gestionar la relación con nuestros clientes y personas de contacto. La legitimación en base a la cuál tratamos sus datos es: ejecución de contrato o interés legítimo. Tiene derecho a acceder, rectificar y suprimir sus datos dirigiéndose a nuestra dirección electrónica info@exclusivasramirez.es Asimismo puede solicitar información adicional y detallada sobre Protección de Datos en la web www.exclusivasramirez.es
