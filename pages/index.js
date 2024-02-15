@@ -21,7 +21,7 @@ const SignaturePad = ({ setSignatureDataUrl }) => {
     <div>
       <SignatureCanvas
         ref={sigPadRef}
-        penColor="white"
+        penColor="black"
         onEnd={saveSignature}
         canvasProps={{
           width: 310,
@@ -123,7 +123,7 @@ const [messageColor, setMessageColor] = useState('');
 
   const { Option, OptGroup } = Select;
 
-  const username = session?.user?.username || session?.user?.email;
+  const username = session?.user?.email.split('@')[0];
 
   const people = [
 
@@ -147,6 +147,7 @@ const [messageColor, setMessageColor] = useState('');
   const onFinish = async (values) => {
     const dataToSend = {
       ...values,
+      username,
       selectedEmail,
       signatureDataUrl,  // Asegúrate de incluir la firma
     };

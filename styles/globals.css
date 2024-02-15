@@ -165,6 +165,7 @@ button:hover {
 }
 .sigCanvas {
   touch-action: none;
+  background-color: #eee;
 }
 /* Para ajustar los colores de las opciones dentro de los Select */
 .ant-select-item {
