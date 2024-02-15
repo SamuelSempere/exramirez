@@ -127,8 +127,8 @@ const [messageColor, setMessageColor] = useState('');
 
   const people = [
 
-    { name: 'José Pardo', email: 'chempe@gmail.com' },
-    { name: 'Fran', email: 'chempe@hotmail.com' },
+    { name: 'José Pardo', email: 'josepardovidal@gmail.com' },
+    { name: 'Fran', email: 'fran.delcasar.er@gmail.com' },
     { name: 'Ramón', email: 'ramon.perez.er@gmail.com' },
     { name: 'Adrián', email: 'adrian.carmona.er@gmail.com' },
     { name: 'Cristian Fernandez', email: 'cristian.fernandez.er@gmail.com' },
