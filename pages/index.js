@@ -182,25 +182,25 @@ const [messageColor, setMessageColor] = useState('');
       <Divider />
       {/* Nombre Comercial */}
       <Form.Item label="Nombre Comercial" name="nombreComercial"
-        rules={[{ required: false, message: 'Por favor ingresa el nombre' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa el nombre' }]}>
         <Input />
       </Form.Item>
 
       {/* Nombre Fiscal */}
       <Form.Item label="Nombre Fiscal" name="nombreFiscal"
-        rules={[{ required: false, message: 'Por favor ingresa tu el nombre' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa tu el nombre' }]}>
         <Input />
       </Form.Item>
 
       {/* CIF/DNI */}
       <Form.Item label="CIF/DNI" name="cifDni"
-        rules={[{ required: false, message: 'Por favor ingresa el DNI/CIF' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa el DNI/CIF' }]}>
         <Input />
       </Form.Item>
 
       {/* Calle y Número */}
       <Form.Item label="Calle y N°" name="calleNumero"
-        rules={[{ required: false, message: 'Por favor ingresa calle y número' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
         <Input />
       </Form.Item> {/* Localidad y Código Postal */}
       <Row gutter={16}>
@@ -209,7 +209,7 @@ const [messageColor, setMessageColor] = useState('');
           <Form.Item
             name="localidad"
             label="Localidad"
-            rules={[{ required: false, message: 'Por favor ingresa tu localidad' }]}
+            rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
           >
             <Input />
           </Form.Item>
@@ -220,7 +220,7 @@ const [messageColor, setMessageColor] = useState('');
           <Form.Item
             name="CP"
             label="CP"
-            rules={[{ required: false, message: 'Por favor ingresa tu código postal' }]}
+            rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
           >
             <Input maxLength={5} />
           </Form.Item>
@@ -229,7 +229,7 @@ const [messageColor, setMessageColor] = useState('');
 
       {/* Persona de Contacto y Teléfonos */}
       <Form.Item label="Persona de Contacto y Teléfonos" name="personaContactoTelefonos"
-        rules={[{ required: false, message: 'Por favor ingresa telefono' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa telefono' }]}>
         <Input />
       </Form.Item>
 
@@ -251,7 +251,7 @@ const [messageColor, setMessageColor] = useState('');
         <Input type="email" />
       </Form.Item>
       {/* Zona de Reparto */}
-      <Form.Item name="zonaReparto" label="Zona de Reparto" rules={[{ required: false, message: 'Por favor, selecciona tu zona de reparto' }]}>
+      <Form.Item name="zonaReparto" label="Zona de Reparto" rules={[{ required: true, message: 'Por favor, selecciona tu zona de reparto' }]}>
         <Select placeholder="Selecciona tu zona de reparto" optionFilterProp="children">
           {repartoOptions.map(option => (
             <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
@@ -287,15 +287,15 @@ const [messageColor, setMessageColor] = useState('');
       <h3>Datos del titular o administrador</h3>
       <Divider />
       <Form.Item label="Nombre" name="NombreTitular"
-        rules={[{ required: false, message: 'Por favor ingresa el nombre' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa el nombre' }]}>
         <Input />
       </Form.Item>
       <Form.Item label="Cif" name="CifTitular"
-        rules={[{ required: false, message: 'Por favor ingresa el Cif' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa el Cif' }]}>
         <Input />
       </Form.Item>
         <Form.Item label="Calle y N°" name="calleNumeroTitular"
-          rules={[{ required: false, message: 'Por favor ingresa calle y número' }]}>
+          rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
           <Input />
         </Form.Item>
         <Row gutter={16}>
@@ -304,7 +304,7 @@ const [messageColor, setMessageColor] = useState('');
             <Form.Item
               name="localidadTitular"
               label="Localidad"
-              rules={[{ required: false, message: 'Por favor ingresa tu localidad' }]}
+              rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
             >
               <Input />
             </Form.Item>
@@ -315,7 +315,7 @@ const [messageColor, setMessageColor] = useState('');
             <Form.Item
               name="CPTitular"
               label="CP"
-              rules={[{ required: false, message: 'Por favor ingresa tu código postal' }]}
+              rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
             >
               <Input maxLength={5} />
             </Form.Item>
@@ -324,7 +324,7 @@ const [messageColor, setMessageColor] = useState('');
         <h3>Domicilio fiscal (si es dístinto al de reparto)</h3>
         <Divider />
         <Form.Item label="Calle y N°" name="calleNumeroFiscal"
-        rules={[{ required: false, message: 'Por favor ingresa calle y número' }]}>
+        rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
         <Input />
       </Form.Item>
       <Row gutter={16}>
@@ -333,7 +333,7 @@ const [messageColor, setMessageColor] = useState('');
           <Form.Item
             name="localidadFiscal"
             label="Localidad"
-            rules={[{ required: false, message: 'Por favor ingresa tu localidad' }]}
+            rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
           >
             <Input />
           </Form.Item>
@@ -344,7 +344,7 @@ const [messageColor, setMessageColor] = useState('');
           <Form.Item
             name="CPfiscal"
             label="CP"
-            rules={[{ required: false, message: 'Por favor ingresa tu código postal' }]}
+            rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
           >
             <Input maxLength={5} />
           </Form.Item>
@@ -352,7 +352,7 @@ const [messageColor, setMessageColor] = useState('');
       </Row>
         <Form.Item label="Forma de pago" name="FormaPago">
          <Input defaultValue='Reposición 5 días' 
-         rules={[{ required: false, message: 'Necesita forma de pago' }]}
+         rules={[{ required: true, message: 'Necesita forma de pago' }]}
          />
         </Form.Item>
         <Divider></Divider>
@@ -363,7 +363,7 @@ const [messageColor, setMessageColor] = useState('');
         <Form.Item
           name="personSelector"
           label="Necesita aprobación de:"
-          rules={[{ required: false, message: 'Por favor, selecciona una persona' }]}
+          rules={[{ required: true, message: 'Por favor, selecciona una persona' }]}
           labelCol={{ style: { color: 'white' } }}
         >
           <Select onChange={setSelectedEmail} placeholder="Selecciona una persona">
