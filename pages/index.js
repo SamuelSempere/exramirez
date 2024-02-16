@@ -239,7 +239,7 @@ const [messageColor, setMessageColor] = useState('');
         name="correoElectronico"
         rules={[
           {
-            required: false,
+            required: true,
             message: 'Por favor ingresa tu correo electrónico',
           },
           {
@@ -260,10 +260,12 @@ const [messageColor, setMessageColor] = useState('');
       </Form.Item>
 
       {/* Observaciones */}
-      <Form.Item label="Horario de entrega" name="hentrega">
+      <Form.Item label="Horario de entrega" name="hentrega"
+        rules={[{ required: true, message: 'necesita un horario' }]}>
       <Input/>
       </Form.Item>
-      <Form.Item label="Dia de visita" name="DiaVisita">
+      <Form.Item label="Dia de visita" name="DiaVisita"
+        rules={[{ required: true, message: 'Por favor, selecciona un día' }]}>
       <Select placeholder="Dia de de la semana">
               <Select.Option key='Lunes'>Lunes</Select.Option>
               <Select.Option key='Martes'>Martes</Select.Option>
@@ -272,13 +274,16 @@ const [messageColor, setMessageColor] = useState('');
               <Select.Option key='Viernes'>Viernes</Select.Option>
       </Select>
     </Form.Item>
-    <Form.Item label="Detras de..." name="Detrasde">
+    <Form.Item label="Detras de..." name="Detrasde"
+          rules={[{ required: true, message: 'Por favor, indica detras de...' }]}>
     <Input/>
     </Form.Item>
 
       <h3>Si es persona física minorista</h3>
       <Divider />
-      <Form.Item label="Recargo de equivalencia" name="Recargo">
+      <Form.Item label="Recargo de equivalencia" name="Recargo"
+        rules={[{ required: true, message: 'Por favor, selecciona una opción' }]}
+        >
         <Radio.Group>
           <Radio value={1}>Si</Radio>
           <Radio value={2}>No</Radio>
@@ -324,7 +329,7 @@ const [messageColor, setMessageColor] = useState('');
         <h3>Domicilio fiscal (si es dístinto al de reparto)</h3>
         <Divider />
         <Form.Item label="Calle y N°" name="calleNumeroFiscal"
-        rules={[{ required: true, message: 'Por favor ingresa calle y número' }]}>
+        rules={[{ required: false, message: 'Por favor ingresa calle y número' }]}>
         <Input />
       </Form.Item>
       <Row gutter={16}>
@@ -333,7 +338,7 @@ const [messageColor, setMessageColor] = useState('');
           <Form.Item
             name="localidadFiscal"
             label="Localidad"
-            rules={[{ required: true, message: 'Por favor ingresa tu localidad' }]}
+            rules={[{ required: false, message: 'Por favor ingresa tu localidad' }]}
           >
             <Input />
           </Form.Item>
@@ -344,15 +349,14 @@ const [messageColor, setMessageColor] = useState('');
           <Form.Item
             name="CPfiscal"
             label="CP"
-            rules={[{ required: true, message: 'Por favor ingresa tu código postal' }]}
+            rules={[{ required: false, message: 'Por favor ingresa tu código postal' }]}
           >
             <Input maxLength={5} />
           </Form.Item>
         </Col>
       </Row>
         <Form.Item label="Forma de pago" name="FormaPago">
-         <Input defaultValue='Reposición 5 días' 
-         rules={[{ required: true, message: 'Necesita forma de pago' }]}
+         <Input rules={[{ required: true, message: 'Necesita forma de pago' }]}
          />
         </Form.Item>
         <Divider></Divider>
