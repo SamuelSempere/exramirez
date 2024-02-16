@@ -47,7 +47,7 @@ async function createPdfWithFormData(formData, username) {
   
     // Agregar los campos del formulario
     const fields = [
-        { label: "DATOS ESTABLECIMEINTO", value: "" },
+        { label: "DATOS ESTABLECIMIENTO", value: "" },
         { label: "Nombre Comercial:", value: formData.nombreComercial },
         { label: "Nombre Fiscal:", value: formData.nombreFiscal },
         { label: "CIF/DNI:", value: formData.cifDni },
