@@ -126,7 +126,7 @@ export default async (req, res) => {
     createPdfWithFormData(formData,username).then(async (pdfBytes) => {
         // Configurar nodemailer
         let transporter = nodemailer.createTransport({
-            host: "smtp.panel247.com",
+            host: "https://smtp.servidor-correo.net",
             port: 587,
             secure: false, // true para 465, false para otros puertos
             auth: {
