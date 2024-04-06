@@ -128,7 +128,8 @@ const [messageColor, setMessageColor] = useState('');
 
   const { Option, OptGroup } = Select;
 
-  const username = session?.user?.email.split('@')[0];
+  //const username = session?.user?.email.split('@')[0];
+  const username = comercialOwn;
 
   const people = [
 
@@ -154,7 +155,7 @@ const [messageColor, setMessageColor] = useState('');
   const onFinish = async (values) => {
     const dataToSend = {
       ...values,
-      username : comercialOwn,
+      username,
       selectedEmail,
       signatureDataUrl,  // Asegúrate de incluir la firma
     };
