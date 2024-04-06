@@ -3,6 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from "next/router";
 import { Form, Input, Select, Radio, Button, Divider, Row, Col,TimePicker  } from 'antd';
 import SignatureCanvas from 'react-signature-canvas';
+import credenciales from '../credenciales.json';
+
+const clienteOptions = credenciales.users.map(user => ({
+  label: user.username,
+  value: user.username
+}));
 
 // Componente SignaturePad
 const SignaturePad = ({ setSignatureDataUrl }) => {
@@ -44,10 +50,9 @@ const [messageColor, setMessageColor] = useState('');
   const { data: session, status } = useSession();
   const router = useRouter();
   const [form] = Form.useForm();
-  const [iban, setIban] = useState('');
   const [selectedEmail, setSelectedEmail] = useState('');
   const [signatureDataUrl, setSignatureDataUrl] = useState('');
-
+  const [comercialOwn , setcomercialOwn] = useState('');
 
   const repartoOptions = [
     "010 POL.ESPARTAL Y POL.FLORIDA",
@@ -149,7 +154,7 @@ const [messageColor, setMessageColor] = useState('');
   const onFinish = async (values) => {
     const dataToSend = {
       ...values,
-      username,
+      username : comercialOwn,
       selectedEmail,
       signatureDataUrl,  // Asegúrate de incluir la firma
     };
@@ -183,6 +188,15 @@ const [messageColor, setMessageColor] = useState('');
       <h3>Datos del establecimiento</h3>
       <Divider />
       {/* Nombre Comercial */}
+      <Form.Item label="Cliente de:" name="clienteDe"
+      rules={[{ required: true, message: 'Por favor selecciona un comercial' }]}>
+      <Select placeholder="Selecciona un cliente"
+      onChange={(value) => setcomercialOwn(value)}>
+        {clienteOptions.map(option => (
+          <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
+        ))}
+      </Select>
+    </Form.Item>
       <Form.Item label="Nombre Comercial" name="nombreComercial"
         rules={[{ required: true, message: 'Por favor ingresa el nombre' }]}>
         <Input />
