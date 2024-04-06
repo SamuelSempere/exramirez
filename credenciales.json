@@ -1,11 +1,6 @@
 {
     "users": [
         {
-            "email": "chempe@gmail.com",
-            "username": "admin",
-            "password": "123"
-        },
-        {
             "email": "v4@exclusivasramirez.com",
             "username": "Daniel Zapata",
             "password": "danv4"

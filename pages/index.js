@@ -139,7 +139,7 @@ const [messageColor, setMessageColor] = useState('');
     { name: 'Adrián', email: 'adrian.carmona.er@gmail.com' },
     { name: 'Cristian Fernandez', email: 'cristian.fernandez.er@gmail.com' },
     { name: 'OFICINA', email: 'info@exclusivasramirez.es' },
-    { name: 'PRUEBAS', email: 'chempe@gmail.com' }
+    //{ name: 'PRUEBAS', email: 'chempe@gmail.com' }
     
     // Agrega más personas según sea necesario
 
