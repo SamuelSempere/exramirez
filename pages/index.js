@@ -190,7 +190,7 @@ const [messageColor, setMessageColor] = useState('');
       {/* Nombre Comercial */}
       <Form.Item label="Cliente de:" name="clienteDe"
       rules={[{ required: true, message: 'Por favor selecciona un comercial' }]}>
-      <Select placeholder="Selecciona un cliente"
+      <Select placeholder="Selecciona un comercial"
       onChange={(value) => setcomercialOwn(value)}>
         {clienteOptions.map(option => (
           <Select.Option key={option.value} value={option.value}>{option.label}</Select.Option>
