@@ -133,7 +133,7 @@ const [messageColor, setMessageColor] = useState('');
 
   const people = [
 
-    { name: 'José Pardo', email: 'josepardovidal@gmail.com' },
+    { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
     { name: 'Fran', email: 'fran.delcasar.er@gmail.com' },
     { name: 'Ramón', email: 'ramon.perez.er@gmail.com' },
     { name: 'Adrián', email: 'adrian.carmona.er@gmail.com' },
