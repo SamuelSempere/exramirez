@@ -121,7 +121,7 @@ async function createPdfWithFormData(formData, username) {
 }
 
 export default async (req, res) => {
-    const { selectedEmail, username, ...formData } = req.body;
+    const { selectedEmail, username, userEmail, ...formData } = req.body;
     // Generar PDF
     createPdfWithFormData(formData,username).then(async (pdfBytes) => {
         // Configurar nodemailer
@@ -139,6 +139,7 @@ export default async (req, res) => {
         let mailOptions = {
             from: 'altaclientes@exclusivasramirez.es',
             to: selectedEmail,
+            cc: userEmail,
             subject: `Nuevo cliente de ${username}`, // Asunto del correo
             text: 'Se adjunta el PDF con los datos del formulario.',
             attachments: [
