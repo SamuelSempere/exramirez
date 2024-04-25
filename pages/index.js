@@ -10,6 +10,9 @@ const clienteOptions = credenciales.users.map(user => ({
   value: user.username
 }));
 
+const { data: session } = useSession();
+const userEmail = session?.user?.email;
+
 // Componente SignaturePad
 const SignaturePad = ({ setSignatureDataUrl }) => {
   const sigPadRef = useRef(null);
@@ -157,7 +160,8 @@ const [messageColor, setMessageColor] = useState('');
       ...values,
       username,
       selectedEmail,
-      signatureDataUrl,  // Asegúrate de incluir la firma
+      signatureDataUrl,
+      userEmail// Asegúrate de incluir la firma
     };
   
     try {
