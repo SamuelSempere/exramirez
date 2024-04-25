@@ -56,7 +56,6 @@ const [messageColor, setMessageColor] = useState('');
   const [signatureDataUrl, setSignatureDataUrl] = useState('');
   const [comercialOwn , setcomercialOwn] = useState('');
 
-const { data: session } = useSession();
 const userEmail = session?.user?.email;
   
   const repartoOptions = [
