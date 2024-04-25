@@ -10,8 +10,7 @@ const clienteOptions = credenciales.users.map(user => ({
   value: user.username
 }));
 
-const { data: session } = useSession();
-const userEmail = session?.user?.email;
+
 
 // Componente SignaturePad
 const SignaturePad = ({ setSignatureDataUrl }) => {
@@ -57,6 +56,9 @@ const [messageColor, setMessageColor] = useState('');
   const [signatureDataUrl, setSignatureDataUrl] = useState('');
   const [comercialOwn , setcomercialOwn] = useState('');
 
+const { data: session } = useSession();
+const userEmail = session?.user?.email;
+  
   const repartoOptions = [
     "010 POL.ESPARTAL Y POL.FLORIDA",
     "100 NOCT. CENTRO",
