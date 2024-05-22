@@ -138,10 +138,10 @@ const userEmail = session?.user?.email;
   const people = [
 
     { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
-    { name: 'Fran', email: 'fran.delcasar.er@gmail.com' },
-    { name: 'Ramón', email: 'ramon.perez.er@gmail.com' },
-    { name: 'Adrián', email: 'adrian.carmona.er@gmail.com' },
-    { name: 'Cristian Fernandez', email: 'cristian.fernandez.er@gmail.com' },
+    { name: 'Fran', email: 'frandelcasar@exclusivasramirez.es' },
+    { name: 'Ramón', email: 'ramonperez@exclusivasramirez.es' },
+    { name: 'Adrián', email: 'adriancarmona@exclusivasramirez.es' },
+    { name: 'Cristian Fernandez', email: 'cristianfernandez@exclusivasramirez.es' },
     { name: 'OFICINA', email: 'info@exclusivasramirez.es' },
     //{ name: 'PRUEBAS', email: 'chempe@gmail.com' }
     
