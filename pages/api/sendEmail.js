@@ -125,15 +125,19 @@ export default async (req, res) => {
     // Generar PDF
     createPdfWithFormData(formData,username).then(async (pdfBytes) => {
         // Configurar nodemailer
-        let transporter = nodemailer.createTransport({
-            host: "smtp.servidor-correo.net",
-            port: 587,
-            secure: false, // true para 465, false para otros puertos
-            auth: {
-                user: 'altaclientes@exclusivasramirez.es', // tu dirección de correo
-                pass: process.env.EMAIL_PASS // contraseña del correo (considera usar variables de entorno)
-            },
-        });
+let transporter = nodemailer.createTransport({
+    host: "smtp.servidor-correo.net", // Servidor SMTP
+    port: 587, // Puerto para TLS
+    secure: false, // False para STARTTLS en el puerto 587
+    auth: {
+        user: 'altaclientes@exclusivasramirez.es', // Tu dirección de correo
+        pass: process.env.EMAIL_PASS // Contraseña (se recomienda usar variables de entorno)
+    },
+    tls: {
+        ciphers: 'SSLv3', // Forzar uso de TLS si es necesario
+        rejectUnauthorized: false // Opción para certificados auto-firmados (opcional)
+    }
+});
 
         // Opciones del correo incluyendo el PDF adjunto
         let mailOptions = {
