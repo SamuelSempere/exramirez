@@ -3,6 +3,7 @@
 .next/
 # Archivos de configuración de entorno
 /.env.local
+/.env
 /.env.development.local
 /.env.test.local
 /.env.production.local

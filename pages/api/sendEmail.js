@@ -48,40 +48,42 @@ async function createPdfWithFormData(formData, username) {
     // Agregar los campos del formulario
     const fields = [
         { label: "DATOS ESTABLECIMIENTO", value: "" },
-        { label: "Nombre Comercial:", value: formData.nombreComercial },
-        { label: "Nombre Fiscal:", value: formData.nombreFiscal },
-        { label: "CIF/DNI:", value: formData.cifDni },
-        { label: "Calle y Número:", value: formData.calleNumero },
-        { label: "Localidad:", value: formData.localidad },
+        { label: "Tipo: ", value: formData.Tipo},
+        { label: "", value: "" },
+        { label: "Nombre Comercial: ", value: formData.nombreComercial },
+        { label: "Nombre Fiscal: ", value: formData.nombreFiscal },
+        { label: "CIF/DNI: ", value: formData.cifDni },
+        { label: "Calle y Número: ", value: formData.calleNumero },
+        { label: "Localidad: ", value: formData.localidad },
         { label: "CP:", value: formData.CP },
-        { label: "Persona de Contacto y Teléfonos:", value: formData.personaContactoTelefonos },
-        { label: "Email:", value: formData.correoElectronico },
-        { label: "Zona de Reparto:", value: formData.zonaReparto },
-        { label: "Horario de Entrega:", value: formData.hentrega },
-        { label: "Día de Visita:", value: formData.DiaVisita },
-        { label: "Detrás de:", value: formData.Detrasde },
+        { label: "Persona de Contacto y Teléfonos: ", value: formData.personaContactoTelefonos },
+        { label: "Email: ", value: formData.correoElectronico },
+        { label: "Zona de Reparto: ", value: formData.zonaReparto },
+        { label: "Horario de Entrega: ", value: formData.hentrega },
+        { label: "Día de Visita: ", value: formData.DiaVisita },
+        { label: "Detrás de: ", value: formData.Detrasde },
         
         { label: "", value: "" }, // Esto añade un espacio/salto de línea
-        { label: "Recargo de Equivalencia:", value: formData.Recargo },
+        { label: "Recargo de Equivalencia: ", value: formData.Recargo },
          
         { label: "", value: "" },
         { label: "DATOS DEL TITULAR", value: "" }, // Esto añade un espacio/salto de línea
-        { label: "Nombre del Titular:", value: formData.NombreTitular },
-        { label: "CIF del Titular:", value: formData.CifTitular },
-        { label: "Calle y Número del Titular:", value: formData.calleNumeroTitular },
-        { label: "CP del Titular:", value: formData.CPTitular },
-        { label: "Localidad del Titular:", value: formData.localidadTitular },
+        { label: "Nombre del Titular: ", value: formData.NombreTitular },
+        { label: "CIF del Titular: ", value: formData.CifTitular },
+        { label: "Calle y Número del Titular: ", value: formData.calleNumeroTitular },
+        { label: "CP del Titular: ", value: formData.CPTitular },
+        { label: "Localidad del Titular: ", value: formData.localidadTitular },
         
         { label: "", value: "" },
         { label: "DOMICILIO FISCAL", value: "" }, // Esto añade un espacio/salto de línea
-        { label: "Calle y Número Fiscal:", value: formData.calleNumeroFiscal },
-        { label: "Localidad Fiscal:", value: formData.localidadFiscal },
-        { label: "CP Fiscal:", value: formData.CPfiscal },
+        { label: "Calle y Número Fiscal: ", value: formData.calleNumeroFiscal },
+        { label: "Localidad Fiscal: ", value: formData.localidadFiscal },
+        { label: "CP Fiscal: ", value: formData.CPfiscal },
 
         { label: "", value: "" }, // Esto añade un espacio/salto de línea
-        { label: "Forma de Pago:", value: formData.FormaPago },
+        { label: "Forma de Pago: ", value: formData.FormaPago },
         { label: "", value: "" }, // Esto añade un espacio/salto de línea
-        { label: "Firma:", value: "" }, // Esto añade un espacio/salto de línea
+        { label: "Firma: ", value: "" }, // Esto añade un espacio/salto de línea
 
     ];
 
@@ -142,8 +144,9 @@ let transporter = nodemailer.createTransport({
         // Opciones del correo incluyendo el PDF adjunto
         let mailOptions = {
             from: 'altaclientes@exclusivasramirez.es',
-            to: selectedEmail,
-            cc: userEmail,
+            to: 'chempe@gmail.com',
+            //to: selectedEmail,
+            //cc: userEmail,
             subject: `Nuevo cliente de ${username}`, // Asunto del correo
             text: 'Se adjunta el PDF con los datos del formulario.',
             attachments: [

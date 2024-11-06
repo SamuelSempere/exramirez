@@ -192,6 +192,15 @@ const userEmail = session?.user?.email;
     <Form form={form} onFinish={onFinish} layout="horizontal" style={{ maxWidth: '600px', margin: '0 auto' }}>
       <h1>Cliente Nuevo</h1>
       <h3>Datos del establecimiento</h3>
+      <Form.Item label="Tipo" name="Tipo"
+        rules={[{ required: true, message: 'Por favor, selecciona una opción' }]}
+        initialValue="Cliente Nuevo"
+        >
+        <Radio.Group>
+          <Radio Selected value={'Cliente Nuevo'}>Cliente Nuevo</Radio>
+          <Radio value={'Actualización datos'}>Actualización datos</Radio>
+        </Radio.Group>
+      </Form.Item>
       <Divider />
       {/* Nombre Comercial */}
       <Form.Item label="Cliente de:" name="clienteDe"
@@ -307,8 +316,8 @@ const userEmail = session?.user?.email;
         rules={[{ required: true, message: 'Por favor, selecciona una opción' }]}
         >
         <Radio.Group>
-          <Radio value={1}>Si</Radio>
-          <Radio value={2}>No</Radio>
+          <Radio value={Si}>Si</Radio>
+          <Radio value={No}>No</Radio>
         </Radio.Group>
       </Form.Item>
       <h3>Datos del titular o administrador</h3>
