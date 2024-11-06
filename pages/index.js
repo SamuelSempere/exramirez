@@ -316,8 +316,8 @@ const userEmail = session?.user?.email;
         rules={[{ required: true, message: 'Por favor, selecciona una opción' }]}
         >
         <Radio.Group>
-          <Radio value={Si}>Si</Radio>
-          <Radio value={No}>No</Radio>
+          <Radio value={'Si'}>Si</Radio>
+          <Radio value={'No'}>No</Radio>
         </Radio.Group>
       </Form.Item>
       <h3>Datos del titular o administrador</h3>
