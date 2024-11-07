@@ -38,7 +38,7 @@ async function createPdfWithFormData(formData, username) {
     function addHeader() {
         addText('Formulario de alta', yPosition, titleFontSize, rgb(3 / 255, 61 / 255, 131 / 255)); // Ajusta el nombre de tu empresa
         yPosition -= (lineHeight * 2);
-        addText(`Nuevo cliente de ${username}`, yPosition, titleFontSize, rgb(3 / 255, 61 / 255, 131 / 255)); // Título con color diferente
+        addText(`${formData.Tipo} de ${username}`, yPosition, titleFontSize, rgb(3 / 255, 61 / 255, 131 / 255)); // Título con color diferente
         yPosition -= (lineHeight * 2);
     }
 
