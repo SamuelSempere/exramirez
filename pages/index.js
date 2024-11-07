@@ -198,7 +198,7 @@ const userEmail = session?.user?.email;
         >
         <Radio.Group>
           <Radio Selected value={'Cliente Nuevo'}>Cliente Nuevo</Radio>
-          <Radio value={'Actualización datos'}>Actualización datos</Radio>
+          <Radio value={'Cambio de datos'}>Cambio de datos</Radio>
         </Radio.Group>
       </Form.Item>
       <Divider />
