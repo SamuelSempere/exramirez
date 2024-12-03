@@ -136,6 +136,7 @@ let transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS // Contraseña (se recomienda usar variables de entorno)
     },
     tls: {
+        ciphers: 'SSLv3', // Forzar uso de TLS si es necesario
         rejectUnauthorized: false // Opción para certificados auto-firmados (opcional)
     }
 });
@@ -143,9 +144,9 @@ let transporter = nodemailer.createTransport({
         // Opciones del correo incluyendo el PDF adjunto
         let mailOptions = {
             from: 'altaclientes@exclusivasramirez.es',
-            to: 'chempe@gmail.com',
-            //to: selectedEmail,
-            //: userEmail,
+            //to: 'chempe@gmail.com',
+            to: selectedEmail,
+            cc: userEmail,
             subject: `Nuevo cliente de ${username}`, // Asunto del correo
             text: 'Se adjunta el PDF con los datos del formulario.',
             attachments: [
