@@ -128,46 +128,40 @@ export default async (req, res) => {
     createPdfWithFormData(formData,username).then(async (pdfBytes) => {
         // Configurar nodemailer
 let transporter = nodemailer.createTransport({
-    host: "smtp.servidor-correo.net", // Servidor SMTP
-    port: 587, // Puerto para TLS
-    secure: false, // False para STARTTLS en el puerto 587
+    host: "smtp.servidor-correo.net",
+    port: 587,
+    secure: false, // STARTTLS
     auth: {
-        user: 'altaclientes@exclusivasramirez.es', // Tu dirección de correo
-        pass: process.env.EMAIL_PASS // Contraseña (se recomienda usar variables de entorno)
+        user: 'altaclientes@exclusivasramirez.es',
+        pass: process.env.EMAIL_PASS,
     },
     tls: {
-        rejectUnauthorized: false // Opción para certificados auto-firmados (opcional)
-    }
+        rejectUnauthorized: false, // Mejor usar certificados válidos en producción
+    },
 });
 
-        // Opciones del correo incluyendo el PDF adjunto
-        let mailOptions = {
-            from: 'altaclientes@exclusivasramirez.es',
-            //to: 'chempe@gmail.com',
-            to: selectedEmail,
-            cc: userEmail,
-            subject: `Nuevo cliente de ${username}`, // Asunto del correo
-            text: 'Se adjunta el PDF con los datos del formulario.',
-            attachments: [
-                {
-                    filename: 'formulario.pdf',
-                    content: pdfBytes,
-                    contentType: 'application/pdf'
-                },
-            ],
-        };
-
-        // Enviar correo
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error("Error al enviar el correo: ", error);
-                return res.status(500).send("Error al enviar el correo: " + error.message);
-            } else {
-                res.status(200).send("Correo enviado con éxito: " + info.response);
-            }
-        });
-    }).catch(error => {
-        console.error('Error al generar el PDF:', error);
-        res.status(500).send("Error al generar el PDF: " + error.message);
-    });
+let mailOptions = {
+    from: '"Exclusivas Ramírez" <altaclientes@exclusivasramirez.es>',
+    to: selectedEmail,
+    cc: userEmail,
+    replyTo: 'altaclientes@exclusivasramirez.es',
+    subject: `Nuevo cliente de ${username}`,
+    text: 'Se adjunta el PDF con los datos del formulario. Por favor, revise el archivo.',
+    encoding: 'utf-8',
+    attachments: [
+        {
+            filename: 'formulario.pdf',
+            content: pdfBytes,
+            contentType: 'application/pdf',
+        },
+    ],
 };
+
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        console.error("Error al enviar el correo: ", error);
+        return res.status(500).send("Error al enviar el correo: " + error.message);
+    }
+    console.log("Correo enviado con éxito: ", info.response);
+    res.status(200).send("Correo enviado con éxito: " + info.response);
+});
