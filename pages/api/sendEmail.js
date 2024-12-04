@@ -136,7 +136,6 @@ let transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS // Contraseña (se recomienda usar variables de entorno)
     },
     tls: {
-        ciphers: 'SSLv3', // Forzar uso de TLS si es necesario
         rejectUnauthorized: false // Opción para certificados auto-firmados (opcional)
     }
 });
