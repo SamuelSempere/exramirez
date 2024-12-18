@@ -1,4 +1,4 @@
-import { useSession, signIn } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from "next/router";
 import { Form, Input, Select, Radio, Button, Divider, Row, Col,TimePicker  } from 'antd';
@@ -424,6 +424,12 @@ const userEmail = session?.user?.email;
           EXCLUSIVAS RAMIREZ S.L., CL. Tárbena, 03008 Alicante, garantiza que la dirección de email que usted nos ha facilitado es utilizada en la forma y con las limitaciones establecidas en la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y Comercio Electrónico (LSSICE).
           El contenido de este correo electrónico y sus anexos son estrictamente confidenciales. En caso de no ser usted el destinatario y haber recibido este mensaje por error, agradeceríamos que lo comunique inmediatamente al remitente, sin difundir, almacenar o copiar su contenido.
         </p>
+             {/* Botón de logout */}
+      <Form.Item>
+        <Button type="primary" danger onClick={() => signOut()}>
+          Cerrar Sesión
+        </Button>
+      </Form.Item>
     </Form>
 
   )
