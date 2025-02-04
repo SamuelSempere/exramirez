@@ -114,6 +114,11 @@
             "email": "joseramongarcia@exclusivasramirez.es",
             "username": "Jose Ramon Garcia",
             "password": "jos225"
+        },
+        {
+            "email": "manuelmartin@exclusivasramirez.es",
+            "username": "Manolo Tajuelo",
+            "password": "mantaj45"
         }
     ]
 }
