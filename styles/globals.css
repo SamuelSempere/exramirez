@@ -1,5 +1,6 @@
 /* globals.css o tu archivo CSS específico */
   body {
+    margin-top: 0px;
     margin-left: auto;
     margin-right: auto;
     width: 100%;
