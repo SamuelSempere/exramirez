@@ -3,7 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-
+SignIn.hideLayout = true;
 export default function SignIn() {
   const { data: session, status } = useSession();
   const router = useRouter();

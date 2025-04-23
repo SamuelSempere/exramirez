@@ -1,17 +1,20 @@
 // pages/_app.js
 import { SessionProvider } from "next-auth/react";
-import Layout from '../components/Layout'; // Asegúrate de que exista
+import Layout from '../components/Layout';
 import '../styles/globals.css';
 
-export default function MyApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
+export default function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const hideLayout = Component.hideLayout; // detectamos si el componente quiere ocultar el layout
+
   return (
     <SessionProvider session={session}>
-      <Layout>
+      {hideLayout ? (
         <Component {...pageProps} />
-      </Layout>
+      ) : (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )}
     </SessionProvider>
   );
 }
