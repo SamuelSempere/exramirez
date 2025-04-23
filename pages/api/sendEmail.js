@@ -144,9 +144,9 @@ let transporter = nodemailer.createTransport({
         // Opciones del correo incluyendo el PDF adjunto
         let mailOptions = {
             from: 'altaclientes@exclusivasramirez.es',
-            //to: 'chempe@gmail.com',
-            to: selectedEmail,
-            cc: userEmail,
+            to: 'chempe@gmail.com',
+            //to: selectedEmail,
+            //cc: userEmail,
             subject: `Nuevo cliente de ${username}`, // Asunto del correo
             text: 'Se adjunta el PDF con los datos del formulario.',
             attachments: [
