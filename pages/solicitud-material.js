@@ -128,12 +128,12 @@ export default function SolicitudMaterialPage() {
 
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label="Horario Entrega - de" name="horarioDesde" rules={[{ required: true }]}>
+            <Form.Item label="Horario - desde:" name="horarioDesde" rules={[{ required: true }]}>
               <Input placeholder="Ej: 10:00" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Horario Entrega - a" name="horarioHasta" rules={[{ required: true }]}>
+            <Form.Item label="Horario hasta:" name="horarioHasta" rules={[{ required: true }]}>
               <Input placeholder="Ej: 12:00" />
             </Form.Item>
           </Col>
