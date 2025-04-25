@@ -58,20 +58,20 @@ const [messageColor, setMessageColor] = useState('');
 
   
 
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (form.isFieldsTouched()) {
-        e.preventDefault();
-        e.returnValue = ''; // Requerido para mostrar la alerta en algunos navegadores
-      }
-    };
-  
-    window.addEventListener('beforeunload', handleBeforeUnload);
-  
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [form]);
+const handleBeforeUnload = (e) => {
+  if (form.isFieldsTouched()) {
+    e.preventDefault();
+    e.returnValue = ''; // Requerido para mostrar la alerta en algunos navegadores
+  }
+};
+
+useEffect(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload);
+
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}, [form]);
   
 
 
