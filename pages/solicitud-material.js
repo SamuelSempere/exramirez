@@ -1,17 +1,25 @@
-import { Form, Input, Button, DatePicker, Radio, Row, Col,Select } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import { message } from 'antd';
+import { Form, Input, Button, DatePicker, Radio, Row, Col, Select, message } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Papa from 'papaparse';
-const locale = require('antd/es/date-picker/locale/es_ES');
 
 export default function SolicitudMaterialPage() {
   const { data: session } = useSession();
   const [form] = Form.useForm();
+  const [locale, setLocale] = useState(null);
+
+  // Solo cargar 'locale' en el cliente para evitar el error de Vercel
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const esLocale = require('antd/es/date-picker/locale/es_ES');
+      setLocale(esLocale);
+    }
+  }, []);
 
   const [loading, setLoading] = useState(false);
-
   const [selectedEmail, setSelectedEmail] = useState('');
+  const [materialesDisponibles, setMaterialesDisponibles] = useState([]);
+
   const people = [
     { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
     { name: 'Fran', email: 'frandelcasar@exclusivasramirez.es' },
@@ -20,7 +28,22 @@ export default function SolicitudMaterialPage() {
     { name: 'Cristian Fernandez', email: 'cristianfernandez@exclusivasramirez.es' },
     { name: 'OFICINA', email: 'info@exclusivasramirez.es' },
   ];
-  
+
+  useEffect(() => {
+    fetch('/materiales.csv')
+      .then((res) => res.text())
+      .then((csv) => {
+        Papa.parse(csv, {
+          header: false,
+          skipEmptyLines: true,
+          complete: (result) => {
+            const descripciones = result.data.map((row) => row[0]);
+            setMaterialesDisponibles(descripciones);
+          },
+        });
+      });
+  }, []);
+
   const onFinish = async (values) => {
     const dataToSend = {
       ...values,
@@ -28,79 +51,47 @@ export default function SolicitudMaterialPage() {
       username: session?.user?.name || 'NombreComercial',
       userEmail: session?.user?.email,
     };
-  
+
     setLoading(true);
-  
     try {
-      console.log(dataToSend)
       const response = await fetch('/api/sendEmailMaterial', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend),
       });
-  
-      if (!response.ok) throw new Error('Error al enviar el correo');
+      if (!response.ok) throw new Error('Error al enviar');
       message.success('Solicitud enviada con éxito');
-      form.resetFields(); // opcional
+      form.resetFields();
     } catch (error) {
-      console.error('Error al enviar solicitud:', error);
+      console.error('Error:', error);
       message.error('Error al enviar la solicitud');
     } finally {
       setLoading(false);
     }
   };
-  
-  const [materialesDisponibles, setMaterialesDisponibles] = useState([]);
 
-  useEffect(() => {
-    fetch('/materiales.csv')
-      .then((response) => response.text())
-      .then((csv) => {
-        Papa.parse(csv, {
-          header: false,
-          skipEmptyLines: true,
-          complete: (result) => {
-            // Cada fila es un array, así que tomamos el primer valor de cada una
-            const descripciones = result.data.map((row) => row[0]);
-            setMaterialesDisponibles(descripciones);
-          },
-        });
-      });
-  }, []);
-  
-  return (<>
-      <h1>Solicitud de Material</h1>
-      <Form layout="vertical" onFinish={onFinish} form={form} style={{ maxWidth: 800, margin: '0 auto' }}>
-      <Form.Item
-  label="Cliente"
-  name="cliente"
-  rules={[{ required: true, message: 'Por favor, escribe el nombre del cliente' }]}
->
-  <Input />
-</Form.Item>
-<Form.Item
-  label="Código Cliente"
-  name="codigoCliente"
-  rules={[{ required: true, message: 'Por favor ingresa el código del cliente' }]}
->
-  <Input />
-</Form.Item>
+  if (!locale) return null; // o un spinner
 
-
-        <Row gutter={16}>
-          <Col span={12}>
-<Form.Item label="Fecha Entrega" name="fechaEntrega" rules={[{ required: true }]}>
-  <DatePicker style={{ width: '100%' }} locale={locale} />
-</Form.Item>
-          </Col>
-          <Col span={12}>
-<Form.Item label="Fecha Retirada" name="fechaRetirada">
-  <DatePicker style={{ width: '100%' }} locale={locale} />
-</Form.Item>
-          </Col>
-        </Row>
+  return (
+    <Form layout="vertical" onFinish={onFinish} form={form} style={{ maxWidth: 800, margin: '0 auto' }}>
+      <Form.Item label="Cliente" name="cliente" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item label="Código Cliente" name="codigoCliente" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label="Fecha Entrega" name="fechaEntrega" rules={[{ required: true }]}>
+            <DatePicker style={{ width: '100%' }} locale={locale} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label="Fecha Retirada" name="fechaRetirada">
+            <DatePicker style={{ width: '100%' }} locale={locale} />
+          </Form.Item>
+        </Col>
+      </Row>
 
         <Form.Item label="¿Es para eventos?" name="eventos" rules={[{ required: true }]}>
           <Radio.Group>
