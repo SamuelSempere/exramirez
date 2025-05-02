@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, DatePicker, Radio, Row, Col, Select, message } from 'antd';
 import { useSession } from 'next-auth/react';
 import Papa from 'papaparse';
+import dayjs from 'dayjs';
+import updateLocale from 'dayjs/plugin/updateLocale';
 
 export default function SolicitudMaterialPage() {
   const { data: session } = useSession();
@@ -11,12 +13,18 @@ export default function SolicitudMaterialPage() {
   const [materialesDisponibles, setMaterialesDisponibles] = useState([]);
   const [locale, setLocale] = useState(null);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const esLocale = require('antd/es/date-picker/locale/es_ES');
-      setLocale(esLocale);
-    }
-  }, []);
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    const esLocale = require('antd/es/date-picker/locale/es_ES');
+
+    dayjs.extend(updateLocale);
+    dayjs.updateLocale('es', {
+      weekStart: 1, // lunes
+    });
+
+    setLocale(esLocale);
+  }
+}, []);
 
   const people = [
     { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
