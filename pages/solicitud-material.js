@@ -17,12 +17,19 @@ useEffect(() => {
   if (typeof window !== 'undefined') {
     const esLocale = require('antd/es/date-picker/locale/es_ES');
 
-    // ⚠️ Modificar directamente el objeto de configuración del locale
-    esLocale.weekStart = 1;
+    // Extiende y actualiza dayjs para que empiece en lunes
+    dayjs.extend(updateLocale);
+    dayjs.updateLocale('es', {
+      weekStart: 1,
+    });
+
+    require('dayjs/locale/es'); // importa el idioma
+    dayjs.locale('es'); // lo activa
 
     setLocale(esLocale);
   }
 }, []);
+
 
 
   const people = [
