@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { message } from 'antd';
 import { useSession } from 'next-auth/react';
 import Papa from 'papaparse';
-import locale from 'antd/es/date-picker/locale/es_ES';
+const locale = require('antd/es/date-picker/locale/es_ES');
 
 export default function SolicitudMaterialPage() {
   const { data: session } = useSession();
