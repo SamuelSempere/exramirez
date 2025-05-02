@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { message } from 'antd';
 import { useSession } from 'next-auth/react';
 import Papa from 'papaparse';
+import locale from 'antd/es/date-picker/locale/es_ES';
+import 'dayjs/locale/es';
 
 
 
@@ -94,14 +96,14 @@ export default function SolicitudMaterialPage() {
 
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label="Fecha Entrega" name="fechaEntrega" rules={[{ required: true }]}>
-              <DatePicker style={{ width: '100%' }} />
-            </Form.Item>
+<Form.Item label="Fecha Entrega" name="fechaEntrega" rules={[{ required: true }]}>
+  <DatePicker style={{ width: '100%' }} locale={locale} />
+</Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="Fecha Retirada" name="fechaRetirada">
-              <DatePicker style={{ width: '100%' }} />
-            </Form.Item>
+<Form.Item label="Fecha Retirada" name="fechaRetirada">
+  <DatePicker style={{ width: '100%' }} locale={locale} />
+</Form.Item>
           </Col>
         </Row>
 
