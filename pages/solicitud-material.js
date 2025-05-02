@@ -17,14 +17,13 @@ useEffect(() => {
   if (typeof window !== 'undefined') {
     const esLocale = require('antd/es/date-picker/locale/es_ES');
 
-    dayjs.extend(updateLocale);
-    dayjs.updateLocale('es', {
-      weekStart: 1, // lunes
-    });
+    // ⚠️ Modificar directamente el objeto de configuración del locale
+    esLocale.weekStart = 1;
 
     setLocale(esLocale);
   }
 }, []);
+
 
   const people = [
     { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
