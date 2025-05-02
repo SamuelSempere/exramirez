@@ -4,11 +4,6 @@ import { message } from 'antd';
 import { useSession } from 'next-auth/react';
 import Papa from 'papaparse';
 import locale from 'antd/es/date-picker/locale/es_ES';
-import 'dayjs/locale/es';
-
-
-
-
 
 export default function SolicitudMaterialPage() {
   const { data: session } = useSession();
