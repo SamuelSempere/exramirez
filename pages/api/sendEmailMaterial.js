@@ -11,9 +11,9 @@ async function createPdfWithFormData(formData, username) {
     let yPosition = 880;
 
 
-function formatDate(dateString) {
-  if (!dateString) return '';
-  return dayjs(dateString).format('DD-MM-YYYY');
+function formatDate(date) {
+  if (!date) return '';
+  return dayjs(date).format('DD-MM-YYYY');
 }
     
 
