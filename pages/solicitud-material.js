@@ -94,12 +94,20 @@ export default function SolicitudMaterialPage() {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Fecha Entrega" name="fechaEntrega" rules={[{ required: true }]}>
-                <DatePicker style={{ width: '100%' }} />
+               <DatePicker
+  style={{ width: '100%' }}
+  format="YYYY-MM-DD"
+  onChange={(date) => form.setFieldsValue({ fechaEntrega: date.format('YYYY-MM-DD') })}
+/>
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item label="Fecha Retirada" name="fechaRetirada">
-                <DatePicker style={{ width: '100%' }} />
+               <DatePicker
+  style={{ width: '100%' }}
+  format="YYYY-MM-DD"
+  onChange={(date) => form.setFieldsValue({ fechaRetirada: date.format('YYYY-MM-DD') })}
+/>
               </Form.Item>
             </Col>
           </Row>
