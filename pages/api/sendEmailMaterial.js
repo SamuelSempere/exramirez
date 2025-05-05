@@ -16,8 +16,9 @@ async function createPdfWithFormData(formData, username) {
 
 function formatDate(date) {
   if (!date) return '';
-  return dayjs.utc(date).format('DD-MM-YYYY');
+  return dayjs(date).add(1, 'day').format('DD-MM-YYYY');
 }
+
 
     
 
