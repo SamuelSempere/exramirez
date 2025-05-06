@@ -188,3 +188,25 @@ color: white;
     flex-basis: 100%;
   }
 }
+
+.material-button {
+  background-color: #4f4f4f !important;
+  color: white !important;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.material-display-button {
+  background-color: #4f4f4f !important;
+  color: white !important;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100% !important;
+  border: 1px solid #666 !important;
+}
+

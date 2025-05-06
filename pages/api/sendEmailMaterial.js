@@ -79,9 +79,10 @@ function formatDate(date) {
       yPosition -= lineHeight;
   
       formData.materiales.forEach((mat, index) => {
-        const texto = `• ${mat.cantidad || ''} x ${mat.descripcion || ''}`;
+        const texto = `• ${mat.cantidad || ''} x ${mat.descripcion || ''} (${mat.estado || ''})`;
         addText(texto, yPosition);
         yPosition -= lineHeight;
+      
       
         if (yPosition < lineHeight * 4) {
           page = pdfDoc.addPage([600, 900]);
@@ -117,9 +118,9 @@ console.log(selectedEmail)
 console.log(userEmail)
         let mailOptions = {
             from: 'altaclientes@exclusivasramirez.es',
-            //to: 'chempe@gmail.com',
-            to: selectedEmail,
-            cc: userEmail,
+            to: 'chempe@gmail.com',
+            //to: selectedEmail,
+            //cc: userEmail,
             subject: `Solicitud de material de ${username}`,
             text: 'Se adjunta el PDF con los datos de la solicitud de material.',
             attachments: [
