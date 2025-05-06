@@ -132,12 +132,6 @@ export default function SolicitudMaterialPage() {
               <Radio value="pedido_material">Ped. material</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label="Material" name="material" rules={[{ required: true }]}>
-            <Radio.Group>
-              <Radio value="nuevo">Nuevo</Radio>
-              <Radio value="segunda_mano">Segunda mano</Radio>
-            </Radio.Group>
-          </Form.Item>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Horario - desde:" name="horarioDesde" rules={[{ required: true }]}>

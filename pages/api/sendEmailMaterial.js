@@ -56,7 +56,6 @@ function formatDate(date) {
         { label: "Fecha Retirada: ", value: formatDate(formData.fechaRetirada) },
         { label: "¿Es para eventos?: ", value: formData.eventos },
         { label: "Servicio y fianza: ", value: formData.servicioFianza },
-        { label: "Material: ", value: formData.material },
         { label: "Horario Entrega - de: ", value: formData.horarioDesde },
         { label: "Horario Entrega - a: ", value: formData.horarioHasta },
         { label: "Necesita aprobación de: ", value: formData.personSelector },
@@ -79,10 +78,10 @@ function formatDate(date) {
       yPosition -= lineHeight;
   
       formData.materiales.forEach((mat, index) => {
-        const texto = `• ${mat.cantidad || ''} x ${mat.descripcion || ''} (${mat.estado || ''})`;
-        addText(texto, yPosition);
+        const texto = `• ${mat.cantidad || ''} x ${mat.descripcion || ''} (${mat.estado || 'sin estado'})`;
+        const color = mat.estado === 'usado' ? rgb(1, 0, 0) : rgb(0, 0, 0); // rojo si usado, negro si no
+        addText(texto, yPosition, fontSize, color);
         yPosition -= lineHeight;
-      
       
         if (yPosition < lineHeight * 4) {
           page = pdfDoc.addPage([600, 900]);
