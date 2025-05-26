@@ -96,8 +96,24 @@ function formatDate(date) {
 }
 
 export default async (req, res) => {
-    const { selectedEmail, username, userEmail, ...formData } = req.body;
+    const { selectedEmail, username, userEmail, comentarios, ...formData } = req.body;
 
+    let mailOptions = {
+        from: 'altaclientes@exclusivasramirez.es',
+        to: selectedEmail,
+        cc: userEmail,
+        subject: `Solicitud de material de ${username}`,
+        text: `Se adjunta el PDF con los datos de la solicitud de material.\n\nComentarios adicionales:\n${comentarios || 'Sin comentarios.'}`,
+        attachments: [
+            {
+                filename: 'solicitud-material.pdf',
+                content: pdfBytes,
+                contentType: 'application/pdf'
+            }
+        ]
+    };
+    
+    
     try {
         const pdfBytes = await createPdfWithFormData(formData, username);
 

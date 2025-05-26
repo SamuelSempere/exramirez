@@ -205,6 +205,10 @@ export default function SolicitudMaterialPage() {
               ))}
             </Select>
           </Form.Item>
+          <Form.Item label="Comentarios" name="comentarios">
+  <Input.TextArea rows={4} placeholder="Introduce tus comentarios o indicaciones adicionales aquí..." />
+</Form.Item>
+
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
               Enviar Solicitud

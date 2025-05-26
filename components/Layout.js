@@ -9,7 +9,7 @@ export default function Layout({ children }) {
   const menuItems = [
     { path: '/cliente-nuevo', label: 'Cliente Nuevo' },
     { path: '/solicitud-material', label: 'Solicitud de Material' },
-    { path: '/condiciones-comerciales', label: 'Condiciones Comerciales', disabled: true }, // <- aquí añadimos `disabled: true`
+    { path: '/solicitud-condiciones', label: 'Condiciones Comerciales', disabled: false }, // <- aquí añadimos `disabled: true`
   ];
 
   return (

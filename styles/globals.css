@@ -212,3 +212,74 @@ color: white;
 .ant-modal-close-x {
   background-color: brown !important
 }
+.modal-negra .ant-modal-content {
+  background-color: #1b1b1b !important; /* fondo negro */
+  color: #ffffff !important;            /* texto blanco */
+}
+
+.modal-negra .ant-modal-title {
+  color: #ffffff !important;            /* título blanco */
+}
+
+.modal-negra .ant-modal-footer button {
+  background-color: #333333 !important; /* botones con fondo gris oscuro */
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+.modal-negra .ant-modal-footer button:hover {
+  background-color: #555555 !important;
+}
+
+.modal-negra .ant-form-item-label > label {
+  color: #ffffff !important;            /* etiquetas del formulario blancas */
+}
+
+.modal-negra input, 
+.modal-negra .ant-select-selector {
+  background-color: #333333 !important; /* fondo campos gris oscuro */
+  color: #ffffff !important;            /* texto blanco */
+  border-color: #ffffff !important;
+}
+
+.modal-negra input::placeholder, 
+.modal-negra .ant-select-selection-placeholder {
+  color: #cccccc !important;            /* placeholder gris claro */
+}
+
+.modal-negra .ant-select-dropdown {
+  background-color: #333333 !important; /* fondo desplegable negro */
+  color: #ffffff !important;
+}
+.modal-negra .ant-modal-header {
+  background-color: #1b1b1b !important; /* Fondo oscuro para cabecera */
+  border-bottom: 1px solid #333333 !important; /* Línea inferior opcional */
+}
+
+.modal-negra .ant-modal-title {
+  color: #ffffff !important; /* Texto blanco */
+}
+.modal-negra .ant-list-item {
+  color: #ffffff !important; /* Texto blanco */
+}
+
+.modal-negra .ant-list-item-meta-title {
+  color: #ffffff !important; /* Si usas meta para título */
+}
+
+.modal-negra .ant-list-item-meta-description {
+  color: #cccccc !important; /* Descripción opcional gris claro */
+}
+.list-condiciones .ant-list-item {
+  color: #ffffff !important; /* Texto blanco */
+}
+
+.list-condiciones .ant-list-item-meta-title {
+  color: #ffffff !important;
+}
+
+.list-condiciones .ant-list-item-meta-description {
+  color: #cccccc !important;
+}
+
+
