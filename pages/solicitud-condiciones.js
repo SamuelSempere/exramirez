@@ -79,6 +79,7 @@ export default function SolicitudCondicionesPage() {
       <>
         <h1>Solicitud de Condiciones Comerciales</h1>
         <Form layout="vertical" onFinish={onFinish} form={form} style={{ maxWidth: 800, margin: '0 auto' }}>
+          {/* Datos generales */}
           <Form.Item label="Código de Cliente" name="codigoCliente" rules={[{ required: true }]}><Input /></Form.Item>
           <Form.Item label="Establecimiento" name="establecimiento" rules={[{ required: true }]}><Input /></Form.Item>
           <Form.Item label="Dirección" name="direccion" rules={[{ required: true }]}><Input /></Form.Item>
@@ -89,6 +90,7 @@ export default function SolicitudCondicionesPage() {
           <Form.Item label="Fecha Solicitud" name="fechaSolicitud" rules={[{ required: true }]}><DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" /></Form.Item>
           <Form.Item label="Vendedor" name="vendedor" rules={[{ required: true }]}><Input /></Form.Item>
 
+          {/* Lista de condiciones barriles */}
           <h3>Detalle de Condiciones Barriles</h3>
           <Button type="primary" onClick={() => setIsModalOpen(true)}>Añadir línea de condición</Button>
           <List
@@ -100,6 +102,7 @@ export default function SolicitudCondicionesPage() {
             )}
           />
 
+          {/* Lista de condiciones cajas */}
           <h3>Detalle de Condiciones Cajas</h3>
           <Button type="primary" onClick={() => setIsModalCajasOpen(true)}>Añadir línea de condición (Cajas)</Button>
           <List
@@ -111,10 +114,12 @@ export default function SolicitudCondicionesPage() {
             )}
           />
 
+          {/* Comentarios */}
           <Form.Item name="comentarios" label="Comentarios">
             <Input.TextArea rows={4} placeholder="Introduce tus comentarios o indicaciones adicionales aquí..." />
           </Form.Item>
 
+          {/* Botón enviar */}
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
               Enviar Solicitud
@@ -122,13 +127,12 @@ export default function SolicitudCondicionesPage() {
           </Form.Item>
         </Form>
 
+        {/* Modal para condiciones barriles */}
         <Modal title="Añadir Condición" open={isModalOpen} onCancel={() => setIsModalOpen(false)} onOk={handleAddLinea} okText="Guardar" cancelText="Cancelar" className="modal-negra">
           <Form layout="vertical" form={modalForm}>
             <Form.Item label="Formato" name="formato" rules={[{ required: true }]}>
               <Select placeholder="Selecciona formato">
-                {formatos.map((f) => (
-                  <Select.Option key={f} value={f}>{f}</Select.Option>  // AQUI solucionado
-                ))}
+                {formatos.map((f) => <Select.Option key={f} value={f}>{f}</Select.Option>)}
               </Select>
             </Form.Item>
             <Form.Item label="X+Y" name="XY"><Input type="text" placeholder="0" /></Form.Item>
@@ -137,21 +141,18 @@ export default function SolicitudCondicionesPage() {
             <Form.Item label="Rapel (%)" name="rapel"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="VTO Rapel" name="vtoRapel" rules={[{ required: true }]}>
               <Select placeholder="Selecciona VTO Rapel">
-                {['Año', 'Semestre', 'Trimestre'].map((op) => (
-                  <Select.Option key={op} value={op}>{op}</Select.Option>  // AQUI solucionado
-                ))}
+                {['Año', 'Semestre', 'Trimestre'].map((op) => <Select.Option key={op} value={op}>{op}</Select.Option>)}
               </Select>
             </Form.Item>
           </Form>
         </Modal>
 
+        {/* Modal para condiciones cajas */}
         <Modal title="Añadir Condición (Cajas)" open={isModalCajasOpen} onCancel={() => setIsModalCajasOpen(false)} onOk={handleAddLineaCajas} okText="Guardar" cancelText="Cancelar" className="modal-negra">
           <Form layout="vertical" form={modalCajasForm}>
             <Form.Item label="Promoción" name="promocion" rules={[{ required: true }]}>
               <Select placeholder="Selecciona promoción">
-                {promociones.map((p) => (
-                  <Select.Option key={p} value={p}>{p}</Select.Option>  // AQUI solucionado
-                ))}
+                {promociones.map((p) => <Select.Option key={p} value={p}>{p}</Select.Option>)}
               </Select>
             </Form.Item>
             <Form.Item label="Descuento (%)" name="descuento"><Input type="number" placeholder="0" /></Form.Item>
