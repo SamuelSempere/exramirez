@@ -122,13 +122,12 @@ export default function SolicitudCondicionesPage() {
           </Form.Item>
         </Form>
 
-        {/* Modal Condiciones Barriles */}
         <Modal title="Añadir Condición" open={isModalOpen} onCancel={() => setIsModalOpen(false)} onOk={handleAddLinea} okText="Guardar" cancelText="Cancelar" className="modal-negra">
           <Form layout="vertical" form={modalForm}>
             <Form.Item label="Formato" name="formato" rules={[{ required: true }]}>
               <Select placeholder="Selecciona formato">
                 {formatos.map((f) => (
-                  <Select.Option key={f} value={f}>{f}</Select.Option>
+                  <Select.Option key={f} value={f}>{f}</Select.Option>  // AQUI solucionado
                 ))}
               </Select>
             </Form.Item>
@@ -138,21 +137,20 @@ export default function SolicitudCondicionesPage() {
             <Form.Item label="Rapel (%)" name="rapel"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="VTO Rapel" name="vtoRapel" rules={[{ required: true }]}>
               <Select placeholder="Selecciona VTO Rapel">
-                <Select.Option key="Año" value="Año">Año</Select.Option>
-                <Select.Option key="Semestre" value="Semestre">Semestre</Select.Option>
-                <Select.Option key="Trimestre" value="Trimestre">Trimestre</Select.Option>
+                {['Año', 'Semestre', 'Trimestre'].map((op) => (
+                  <Select.Option key={op} value={op}>{op}</Select.Option>  // AQUI solucionado
+                ))}
               </Select>
             </Form.Item>
           </Form>
         </Modal>
 
-        {/* Modal Condiciones Cajas */}
         <Modal title="Añadir Condición (Cajas)" open={isModalCajasOpen} onCancel={() => setIsModalCajasOpen(false)} onOk={handleAddLineaCajas} okText="Guardar" cancelText="Cancelar" className="modal-negra">
           <Form layout="vertical" form={modalCajasForm}>
             <Form.Item label="Promoción" name="promocion" rules={[{ required: true }]}>
               <Select placeholder="Selecciona promoción">
                 {promociones.map((p) => (
-                  <Select.Option key={p} value={p}>{p}</Select.Option>
+                  <Select.Option key={p} value={p}>{p}</Select.Option>  // AQUI solucionado
                 ))}
               </Select>
             </Form.Item>
