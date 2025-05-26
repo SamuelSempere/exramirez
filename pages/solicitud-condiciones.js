@@ -96,7 +96,17 @@ export default function SolicitudCondicionesPage() {
           <List
             dataSource={condiciones}
             renderItem={(item) => (
-              <List.Item key={item.id} actions={[<Button type="primary" danger onClick={() => handleRemoveLinea(item.id)}>X</Button>]}>
+              <List.Item
+                key={item.id}
+                actions={[
+                  <Button
+                    key={`delete-barril-${item.id}`}
+                    type="primary"
+                    danger
+                    onClick={() => handleRemoveLinea(item.id)}
+                  >X</Button>
+                ]}
+              >
                 <b>{item.formato}</b> - Dto: {item.dtoDirecto || 0}% - Rapel: {item.rapel || 0}% - Barril S/C: {item.barrilSC || 0} - VTO Rapel: {item.vtoRapel || ''}
               </List.Item>
             )}
@@ -108,7 +118,17 @@ export default function SolicitudCondicionesPage() {
           <List
             dataSource={condicionesCajas}
             renderItem={(item) => (
-              <List.Item key={item.id} actions={[<Button type="primary" danger onClick={() => handleRemoveLineaCajas(item.id)}>X</Button>]}>
+              <List.Item
+                key={item.id}
+                actions={[
+                  <Button
+                    key={`delete-caja-${item.id}`}
+                    type="primary"
+                    danger
+                    onClick={() => handleRemoveLineaCajas(item.id)}
+                  >X</Button>
+                ]}
+              >
                 <b>{item.promocion}</b> - Descuento: {item.descuento || 0}% - € x Caja: {item.precioCaja || 0}
               </List.Item>
             )}
