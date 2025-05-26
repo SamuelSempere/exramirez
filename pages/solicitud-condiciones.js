@@ -100,6 +100,7 @@ const [modalCajasForm] = Form.useForm();
   dataSource={condiciones}
   renderItem={(item, index) => (
     <List.Item
+    key={index}
       actions={[<Button type="primary" danger onClick={() => handleRemoveLinea(index)}>X</Button>]}   
     >
       <b>{item.formato}</b> - Dto: {item.dtoDirecto || 0}% - Rapel: {item.rapel || 0}% - Barril S/C: {item.barrilSC || 0} - VTO Rapel: {item.vtoRapel || ''}
@@ -113,6 +114,7 @@ const [modalCajasForm] = Form.useForm();
   dataSource={condicionesCajas}
   renderItem={(item, index) => (
     <List.Item
+    key={index}
       actions={[<Button type="primary" danger onClick={() => handleRemoveLineaCajas(index)}>X</Button>]}
     >
       <b>{item.promocion}</b> - Descuento: {item.descuento || 0}% - € x Caja: {item.precioCaja || 0}
