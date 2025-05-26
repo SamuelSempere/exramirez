@@ -155,9 +155,9 @@ export default function SolicitudCondicionesPage() {
             <Form.Item label="Rapel (%)" name="rapel"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="VTO Rapel" name="vtoRapel" rules={[{ required: true }]}>
               <Select placeholder="Selecciona VTO Rapel">
-                <Select.Option value="Año">Año</Select.Option>
-                <Select.Option value="Semestre">Semestre</Select.Option>
-                <Select.Option value="Trimestre">Trimestre</Select.Option>
+                <Select.Option key="año" value="Año">Año</Select.Option>
+                <Select.Option key="semestre" value="Semestre">Semestre</Select.Option>
+                <Select.Option key="trimestre" value="Trimestre">Trimestre</Select.Option>
               </Select>
             </Form.Item>
           </Form>
@@ -175,11 +175,12 @@ export default function SolicitudCondicionesPage() {
         >
           <Form layout="vertical" form={modalCajasForm}>
             <Form.Item label="Promoción" name="promocion" rules={[{ required: true }]}>
-              <Select placeholder="Selecciona promoción">
-                <Select.Option value="4+1">4+1</Select.Option>
-                <Select.Option value="3+1">3+1</Select.Option>
-                <Select.Option value="2+1">2+1</Select.Option>
-              </Select>
+            <Select placeholder="Selecciona promoción">
+  <Select.Option key="4+1" value="4+1">4+1</Select.Option>
+  <Select.Option key="3+1" value="3+1">3+1</Select.Option>
+  <Select.Option key="2+1" value="2+1">2+1</Select.Option>
+</Select>
+
             </Form.Item>
             <Form.Item label="Descuento (%)" name="descuento"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="€ x Caja" name="precioCaja"><Input type="number" placeholder="0" /></Form.Item>
