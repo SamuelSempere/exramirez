@@ -133,9 +133,9 @@ console.log(selectedEmail)
 console.log(userEmail)
         let mailOptions = {
             from: 'altaclientes@exclusivasramirez.es',
-            //to: 'chempe@gmail.com',
-            to: selectedEmail,
-            cc: userEmail,
+            to: 'chempe@gmail.com',
+            //to: selectedEmail,
+            //cc: userEmail,
             subject: `Solicitud de material de ${username}`,
             text: 'Se adjunta el PDF con los datos de la solicitud de material.',
             attachments: [
