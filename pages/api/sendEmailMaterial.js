@@ -97,7 +97,7 @@ function formatDate(date) {
 
 export default async (req, res) => {
     const { selectedEmail, username, userEmail, comentarios, ...formData } = req.body;
-
+    const pdfBytes = await createPdfWithFormData(formData, username);
     let mailOptions = {
         from: 'altaclientes@exclusivasramirez.es',
             to: 'chempe@gmail.com',
@@ -116,7 +116,7 @@ export default async (req, res) => {
     
     
     try {
-        const pdfBytes = await createPdfWithFormData(formData, username);
+        
 
         let transporter = nodemailer.createTransport({
             host: "smtp.servidor-correo.net",
