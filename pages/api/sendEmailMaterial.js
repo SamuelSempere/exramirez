@@ -100,8 +100,9 @@ export default async (req, res) => {
 
     let mailOptions = {
         from: 'altaclientes@exclusivasramirez.es',
-        to: selectedEmail,
-        cc: userEmail,
+            to: 'chempe@gmail.com',
+            //to: selectedEmail,
+            //cc: userEmail,
         subject: `Solicitud de material de ${username}`,
         text: `Se adjunta el PDF con los datos de la solicitud de material.\n\nComentarios adicionales:\n${comentarios || 'Sin comentarios.'}`,
         attachments: [
@@ -131,21 +132,7 @@ export default async (req, res) => {
         });
 console.log(selectedEmail)
 console.log(userEmail)
-        let mailOptions = {
-            from: 'altaclientes@exclusivasramirez.es',
-            to: 'chempe@gmail.com',
-            //to: selectedEmail,
-            //cc: userEmail,
-            subject: `Solicitud de material de ${username}`,
-            text: 'Se adjunta el PDF con los datos de la solicitud de material.',
-            attachments: [
-                {
-                    filename: 'solicitud-material.pdf',
-                    content: pdfBytes,
-                    contentType: 'application/pdf'
-                }
-            ]
-        };
+
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
