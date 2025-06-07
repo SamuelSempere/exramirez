@@ -97,11 +97,12 @@ function formatDate(date) {
 
 export default async (req, res) => {
     const { selectedEmail, username, userEmail, comentarios, ...formData } = req.body;
-
+    const pdfBytes = await createPdfWithFormData(formData, username);
     let mailOptions = {
         from: 'altaclientes@exclusivasramirez.es',
-        to: selectedEmail,
-        cc: userEmail,
+            //to: 'chempe@gmail.com',
+            to: selectedEmail,
+            cc: userEmail,
         subject: `Solicitud de material de ${username}`,
         text: `Se adjunta el PDF con los datos de la solicitud de material.\n\nComentarios adicionales:\n${comentarios || 'Sin comentarios.'}`,
         attachments: [
@@ -115,7 +116,7 @@ export default async (req, res) => {
     
     
     try {
-        const pdfBytes = await createPdfWithFormData(formData, username);
+        
 
         let transporter = nodemailer.createTransport({
             host: "smtp.servidor-correo.net",
@@ -131,21 +132,7 @@ export default async (req, res) => {
         });
 console.log(selectedEmail)
 console.log(userEmail)
-        let mailOptions = {
-            from: 'altaclientes@exclusivasramirez.es',
-            //to: 'chempe@gmail.com',
-            to: selectedEmail,
-            cc: userEmail,
-            subject: `Solicitud de material de ${username}`,
-            text: 'Se adjunta el PDF con los datos de la solicitud de material.',
-            attachments: [
-                {
-                    filename: 'solicitud-material.pdf',
-                    content: pdfBytes,
-                    contentType: 'application/pdf'
-                }
-            ]
-        };
+
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
