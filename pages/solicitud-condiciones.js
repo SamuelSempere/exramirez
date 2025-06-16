@@ -16,6 +16,8 @@ import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
 import Papa from 'papaparse';
 import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+
 
 export default function SolicitudCondicionesPage() {
   const [form] = Form.useForm();
@@ -38,6 +40,9 @@ const [selectedEmail, setSelectedEmail] = useState('');
 
   const [barriles, setBarriles] = useState([]);
   const [cajas, setCajas] = useState([]);
+
+  const { data: session } = useSession();
+
 
   const people = [
     { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
@@ -109,27 +114,36 @@ const [selectedEmail, setSelectedEmail] = useState('');
 
 
 
-  const onFinish = async (values) => {
-    const dataToSend = { ...values, condiciones, condicionesCajas };
-    setLoading(true);
-    try {
-      const response = await fetch('/api/sendCondicionesComerciales', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend),
-      });
-      if (!response.ok) throw new Error('Error al enviar');
-      message.success('Solicitud enviada con éxito');
-      form.resetFields();
-      setCondiciones([]);
-      setCondicionesCajas([]);
-    } catch (error) {
-      console.error('Error:', error);
-      message.error('Error al enviar la solicitud');
-    } finally {
-      setLoading(false);
-    }
+const onFinish = async (values) => {
+  const dataToSend = {
+    ...values,
+    condiciones,
+    condicionesCajas,
+    selectedEmail,
+    username: session?.user?.name || 'No especificado',
+    userEmail: session?.user?.email || '',
   };
+
+  setLoading(true);
+  try {
+    const response = await fetch('/api/send-solicitar-condiciones', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dataToSend),
+    });
+
+    if (!response.ok) throw new Error('Error al enviar');
+    message.success('Solicitud enviada con éxito');
+    form.resetFields();
+    setCondiciones([]);
+    setCondicionesCajas([]);
+  } catch (error) {
+    console.error('Error:', error);
+    message.error('Error al enviar la solicitud');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleAddLinea = () => {
     modalForm.validateFields().then((values) => {
