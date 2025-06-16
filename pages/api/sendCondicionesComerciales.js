@@ -116,7 +116,10 @@ export default async function handler(req, res) {
       }
     });
 
-    const mailOptions = {
+console.log(selectedEmail,userEmail)
+    
+const mailOptions = {
+      
       from: 'altaclientes@exclusivasramirez.es',
       to:'chempe@gmail.com',
       //to: selectedEmail,
