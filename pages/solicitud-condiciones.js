@@ -9,6 +9,7 @@ import {
   Modal,
   Select,
   message,
+  Divider,
 } from 'antd';
 import esES from 'antd/locale/es_ES';
 import { v4 as uuidv4 } from 'uuid';
@@ -28,6 +29,8 @@ export default function SolicitudCondicionesPage() {
 
   const [clientes, setClientes] = useState([]);
 const [selectedCliente, setSelectedCliente] = useState(null);
+const [selectedEmail, setSelectedEmail] = useState('');
+
 
   const [modalCajasForm] = Form.useForm();
 
@@ -35,6 +38,15 @@ const [selectedCliente, setSelectedCliente] = useState(null);
 
   const [barriles, setBarriles] = useState([]);
   const [cajas, setCajas] = useState([]);
+
+  const people = [
+    { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
+    { name: 'Fran', email: 'frandelcasar@exclusivasramirez.es' },
+    { name: 'Ramón', email: 'ramonperez@exclusivasramirez.es' },
+    { name: 'Adrián', email: 'adriancarmona@exclusivasramirez.es' },
+    { name: 'Cristian Fernandez', email: 'cristianfernandez@exclusivasramirez.es' },
+    { name: 'OFICINA', email: 'info@exclusivasramirez.es' },
+  ];
 
   useEffect(() => {
     fetch('/clientes.csv')
@@ -51,6 +63,7 @@ const [selectedCliente, setSelectedCliente] = useState(null);
               poblacion: row['Población']?.trim(),
               direccion: row['Dirección']?.trim(),
               dni: row['CIF/NIF']?.trim(),
+              vendedor: row['Cód. vendedor']?.trim(),
               // propietario: row['FS. Nombre']?.trim(), // lo vamos a quitar
             })).filter(c => c.codigoCliente && c.establecimiento);
             setClientes(clientesData);
@@ -142,7 +155,32 @@ const [selectedCliente, setSelectedCliente] = useState(null);
     setCondicionesCajas(condicionesCajas.filter((item) => item.id !== id));
   };
 
-  
+const etiquetasCondiciones = {
+  formato: "Formato",
+  dtoDirecto: "Dto (%)",
+  dtoeuro: "€ Dto",
+  rapel: "Rapel (%)",
+  rapeleuro: "€ Rapel",
+  cantidadSC: "Cantidad Sin Cargo",  // 👈 nuevo campo
+  barrilSC: "Barril S/C",
+  vtoRapel: "VTO Rapel",
+  dto :"Dto %"
+};
+
+
+const etiquetasCajas = {
+  dtoeurocaja : "€ Dto ",
+  dtocaja : "% Dto ",
+  rapeleurocaja : "€ Rapel",
+  rapelcaja : "% Rapel",
+  formato: "Formato",
+  promocion: "Promoción",
+  descuento: "Descuento (%)",
+  precioCaja: "€ x Caja",
+   cantidadSC: "Cantidad Sin Cargo",
+   vtoRapel: "VTO Rapel"  // 👈 nuevo campo
+};
+
 
   return (
     <ConfigProvider locale={esES}>
@@ -169,6 +207,7 @@ const [selectedCliente, setSelectedCliente] = useState(null);
           poblacion: cliente.poblacion,
           direccion: cliente.direccion,
           dni: cliente.dni,
+          vendedor: cliente.vendedor || "",
         });
       }
     }}
@@ -201,66 +240,92 @@ const [selectedCliente, setSelectedCliente] = useState(null);
           {/* Lista de condiciones barriles */}
           <h3>Detalle de Condiciones Barriles</h3>
           <Button type="primary" onClick={() => setIsModalOpen(true)}>Añadir línea de condición</Button>
-          <List
+         <List
+         className="condicion-item"
   dataSource={condiciones}
   renderItem={(item) => {
-    const partes = [
-      item.dtoDirecto ? `Dto: ${item.dtoDirecto}%` : null,
-      item.rapel ? `Rapel: ${item.rapel}%` : null,
-      item.barrilSC ? `Barril S/C: ${item.barrilSC}` : null,
-      item.vtoRapel ? `VTO Rapel: ${item.vtoRapel}` : null,
-    ].filter(Boolean);
+    const detalles = Object.entries(item)
+      .filter(([key, val]) => key !== 'id' && val !== undefined && val !== '')
+      .map(([key, val]) => `${etiquetasCondiciones[key] || key}: ${val}`);
 
     return (
+      <>
       <List.Item
-        className="condicion-item"
+      className="condicion-item"
         key={item.id}
         actions={[
           <Button
-            key={`delete-barril-${item.id}`}
+            key={`delete-${item.id}`}
             type="primary"
             danger
             onClick={() => handleRemoveLinea(item.id)}
-          >X</Button>
+          >
+            X
+          </Button>,
         ]}
       >
-        <b>{item.formato}</b>{partes.length > 0 ? ' - ' + partes.join(' - ') : ''}
+        <div>
+          {detalles.map((linea, i) => (
+            <div key={i}>{linea}</div>
+          ))}
+        </div>
       </List.Item>
+      <Divider style={{ backgroundColor: 'white', margin: '8px 0' }} />
+      </>
     );
   }}
 />
 
 
+
           {/* Lista de condiciones cajas */}
           <h3>Detalle de Condiciones Cajas</h3>
           <Button type="primary" onClick={() => setIsModalCajasOpen(true)}>Añadir línea de condición (Cajas)</Button>
-          <List
+         <List
   dataSource={condicionesCajas}
+  className="condicion-item"
   renderItem={(item) => {
-    const partes = [
-      item.promocion ? `Promoción: ${item.promocion}` : null,
-      item.descuento ? `Descuento: ${item.descuento}%` : null,
-      item.precioCaja ? `€ x Caja: ${item.precioCaja}` : null,
-    ].filter(Boolean);
+    const detalles = Object.entries(item)
+      .filter(([key, val]) => key !== 'id' && val !== undefined && val !== '')
+      .map(([key, val]) => `${etiquetasCajas[key] || key}: ${val}`);
 
     return (
+      <>
       <List.Item
-        className="condicion-item"
         key={item.id}
+        className="condicion-item"
         actions={[
           <Button
             key={`delete-caja-${item.id}`}
             type="primary"
             danger
             onClick={() => handleRemoveLineaCajas(item.id)}
-          >X</Button>
+          >
+            X
+          </Button>,
         ]}
       >
-        <b>{item.formato}</b>{partes.length > 0 ? ' - ' + partes.join(' - ') : ''}
+        <div>
+          {detalles.map((linea, i) => (
+            <div key={i}>{linea}</div>
+          ))}
+        </div>
       </List.Item>
+              <Divider style={{ backgroundColor: 'white', margin: '8px 0' }} />
+
+      </>
     );
   }}
 />
+  <Form.Item name="personSelector" label="Necesita aprobación de:" rules={[{ required: true }]}>
+            <Select onChange={setSelectedEmail} placeholder="Selecciona una persona">
+              {people.map(person => (
+                <Select.Option key={person.email} value={person.email}>
+                  {person.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
 
 
           {/* Comentarios */}
@@ -292,6 +357,10 @@ const [selectedCliente, setSelectedCliente] = useState(null);
             <Form.Item label="€ Rapel" name="rapeleuro"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="Dto (%)" name="dto"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="Rapel (%)" name="rapel"><Input type="number" placeholder="0" /></Form.Item>
+            <Form.Item label="Cantidad Sin Cargo" name="cantidadSC">
+  <Input placeholder="Especifica cantidad u observación..." />
+</Form.Item>
+
             
             <Form.Item label="VTO Rapel" name="vtoRapel" rules={[{ required: false }]}>
               <Select placeholder="Selecciona VTO Rapel">
@@ -315,17 +384,16 @@ const [selectedCliente, setSelectedCliente] = useState(null);
 
 
             
-            <Form.Item label="Promoción" name="promocion" rules={[{ required: true }]}>
-              
-              
-              <Select placeholder="Selecciona promoción">
-                {promociones.map((p) => <Select.Option key={p} value={p}>{p}</Select.Option>)}
-              </Select>
-            </Form.Item>
+                        
+           <Form.Item label="Promoción" name="promocion"><Input type="text" placeholder="x+y" /></Form.Item>
             <Form.Item label="€ Dto" name="dtoeurocaja"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="€ Rapel" name="rapeleurocaja"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="Dto (%)" name="dtocaja"><Input type="number" placeholder="0" /></Form.Item>
             <Form.Item label="Rapel (%)" name="rapelcaja"><Input type="number" placeholder="0" /></Form.Item>
+            <Form.Item label="Cantidad Sin Cargo" name="cantidadSC">
+  <Input placeholder="Especifica cantidad u observación..." />
+</Form.Item>
+
             <Form.Item label="VTO Rapel" name="vtoRapel" rules={[{ required: false }]}>
               <Select placeholder="Selecciona VTO Rapel">
                 {['Año', 'Semestre', 'Trimestre'].map((op) => <Select.Option key={op} value={op}>{op}</Select.Option>)}
