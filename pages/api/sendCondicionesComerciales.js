@@ -121,9 +121,9 @@ console.log(selectedEmail,userEmail)
 const mailOptions = {
       
       from: 'altaclientes@exclusivasramirez.es',
-      to:'chempe@gmail.com',
-      //to: selectedEmail,
-      //cc: userEmail,
+      //to:'chempe@gmail.com',
+      to: selectedEmail,
+      cc: userEmail,
       subject: `Solicitud de condiciones de ${username || 'usuario no identificado'}`,
       text: `Se adjunta el PDF con los datos de la solicitud de condiciones comerciales.\n\nComentarios adicionales:\n${comentarios || 'Sin comentarios.'}`,
       attachments: [
