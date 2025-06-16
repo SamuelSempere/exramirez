@@ -126,7 +126,7 @@ const onFinish = async (values) => {
 
   setLoading(true);
   try {
-    const response = await fetch('/api/send-solicitar-condiciones', {
+    const response = await fetch('/api/sendCondicionesComerciales', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dataToSend),
