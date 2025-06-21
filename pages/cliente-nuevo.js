@@ -155,17 +155,14 @@ const userEmail = session?.user?.email;
   const username = comercialOwn;
 
   const people = [
-
     { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
     { name: 'Fran', email: 'frandelcasar@exclusivasramirez.es' },
     { name: 'Ramón', email: 'ramonperez@exclusivasramirez.es' },
     { name: 'Adrián', email: 'adriancarmona@exclusivasramirez.es' },
     { name: 'Cristian Fernandez', email: 'cristianfernandez@exclusivasramirez.es' },
-    { name: 'OFICINA', email: 'info@exclusivasramirez.es' },
-    //{ name: 'PRUEBAS', email: 'chempe@gmail.com' }
-    
-    // Agrega más personas según sea necesario
-
+    { name: 'Ismael García', email: 'ismaelgarcia@exclusivasramirez.es' },
+    { name: 'Cristian Martínez', email: 'cristianmartinez@exclusivasramirez.es' },
+    { name: 'OFICINA', email: 'info@exclusivasramirez.es' }
   ];
 
   useEffect(() => {

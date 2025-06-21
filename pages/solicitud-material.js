@@ -38,7 +38,9 @@ export default function SolicitudMaterialPage() {
     { name: 'Ramón', email: 'ramonperez@exclusivasramirez.es' },
     { name: 'Adrián', email: 'adriancarmona@exclusivasramirez.es' },
     { name: 'Cristian Fernandez', email: 'cristianfernandez@exclusivasramirez.es' },
-    { name: 'OFICINA', email: 'info@exclusivasramirez.es' },
+    { name: 'Ismael García', email: 'ismaelgarcia@exclusivasramirez.es' },
+    { name: 'Cristian Martínez', email: 'cristianmartinez@exclusivasramirez.es' },
+    { name: 'OFICINA', email: 'info@exclusivasramirez.es' }
   ];
 
   useEffect(() => {
