@@ -147,25 +147,48 @@ const onFinish = async (values) => {
   }
 };
 
-  const handleAddLinea = () => {
-    modalForm.validateFields().then((values) => {
-      setCondiciones([...condiciones, { ...values, id: uuidv4() }]);
-      modalForm.resetFields();
-      setIsModalOpen(false);
-    });
-  };
+const handleAddLinea = () => {
+  modalForm.validateFields().then((values) => {
+    // Excluir campos que no cuentan
+    const camposImportantes = { ...values };
+    delete camposImportantes.formato;
+    delete camposImportantes.vtoRapel;
+
+    const algunCampoRellenado = Object.values(camposImportantes).some(val => val !== undefined && val !== '');
+
+    if (!algunCampoRellenado) {
+      message.warning('Rellena al menos un campo de condición (excepto Formato y VTO Rapel)');
+      return;
+    }
+
+    setCondiciones([...condiciones, { ...values, id: uuidv4() }]);
+    modalForm.resetFields();
+    setIsModalOpen(false);
+  });
+};
 
   const handleRemoveLinea = (id) => {
     setCondiciones(condiciones.filter((item) => item.id !== id));
   };
 
-  const handleAddLineaCajas = () => {
-    modalCajasForm.validateFields().then((values) => {
-      setCondicionesCajas([...condicionesCajas, { ...values, id: uuidv4() }]);
-      modalCajasForm.resetFields();
-      setIsModalCajasOpen(false);
-    });
-  };
+const handleAddLineaCajas = () => {
+  modalCajasForm.validateFields().then((values) => {
+    const camposImportantes = { ...values };
+    delete camposImportantes.formato;
+    delete camposImportantes.vtoRapel;
+
+    const algunCampoRellenado = Object.values(camposImportantes).some(val => val !== undefined && val !== '');
+
+    if (!algunCampoRellenado) {
+      message.warning('Rellena al menos un campo de condición (excepto Formato y VTO Rapel)');
+      return;
+    }
+
+    setCondicionesCajas([...condicionesCajas, { ...values, id: uuidv4() }]);
+    modalCajasForm.resetFields();
+    setIsModalCajasOpen(false);
+  });
+};
 
   const handleRemoveLineaCajas = (id) => {
     setCondicionesCajas(condicionesCajas.filter((item) => item.id !== id));
@@ -250,6 +273,12 @@ const etiquetasCajas = {
   initialValue={dayjs()} // 👈 Aquí pones hoy por defecto
 >
   <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
+  <Form.Item
+  label="Fecha Final (opcional)"
+  name="fechaFinal"
+>
+  <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
+</Form.Item>
 </Form.Item>
           <Form.Item label="Vendedor" name="vendedor" rules={[{ required: true }]}><Input /></Form.Item>
 

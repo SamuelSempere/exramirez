@@ -5,17 +5,19 @@ import logoBase64 from '../../lib/logoBase64'; // Asegúrate que esta ruta y arc
 
 // Función para crear PDF
 async function createCondicionesPDF(formData, username) {
-  const {
-    codigoCliente,
-    direccion,
-    poblacion,
-    dni,
-    fechaSolicitud,
-    vendedor,
-    comentarios,
-    condiciones = [],
-    condicionesCajas = [],
-  } = formData;
+const {
+  codigoCliente,
+  direccion,
+  poblacion,
+  dni,
+  fechaSolicitud,
+  fechaFinal, // 👈 Añadir aquí
+  vendedor,
+  comentarios,
+  condiciones = [],
+  condicionesCajas = [],
+} = formData;
+
 
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([595, 842]);
@@ -52,6 +54,9 @@ async function createCondicionesPDF(formData, username) {
   drawText(`Población: ${poblacion}`);
   drawText(`DNI / NIF: ${dni}`);
   drawText(`Fecha Solicitud: ${dayjs(fechaSolicitud).format('DD-MM-YYYY')}`);
+if (fechaFinal) {
+  drawText(`Fecha Final: ${dayjs(fechaFinal).format('DD-MM-YYYY')}`);
+}
   drawText(`Vendedor: ${vendedor}`);
   drawText(`Solicitado por: ${username || 'No especificado'}`);
   y -= 10;
