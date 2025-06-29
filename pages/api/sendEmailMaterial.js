@@ -8,8 +8,8 @@ dayjs.extend(utc);
 async function createPdfWithFormData(formData, username) {
     const pdfDoc = await PDFDocument.create();
     let page = pdfDoc.addPage([600, 900]);
-    const fontSize = 12;
-    const titleFontSize = 18;
+    const fontSize = 10;
+    const titleFontSize = 16;
     const lineHeight = 18;
     let yPosition = 880;
 

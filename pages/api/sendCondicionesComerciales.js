@@ -40,7 +40,7 @@ const {
 
 
 const drawText = (text, opts = {}) => {
-  const { size = 11, bold = false, dy = 16 } = opts;
+  const { size = 9, bold = false, dy = 16 } = opts;
 
   // Si no hay espacio suficiente, añade nueva página y reinicia la altura
   if (y - dy < 40) {
@@ -62,7 +62,7 @@ const drawText = (text, opts = {}) => {
 
 
 
-  drawText('Solicitud de Condiciones Comerciales', { size: 16, bold: true, dy: 20 });
+  drawText('Solicitud de Condiciones Comerciales', { size: 14, bold: true, dy: 20 });
   drawText(`Cliente: ${codigoCliente}`);
   drawText(`Dirección: ${direccion}`);
   drawText(`Población: ${poblacion}`);
@@ -76,7 +76,7 @@ if (fechaFinal) {
   y -= 10;
 
   if (condiciones.length > 0) {
-    drawText('Condiciones Barriles', { bold: true, size: 14, dy: 20 });
+    drawText('Condiciones Barriles', { bold: true, size: 12, dy: 20 });
 
     condiciones.forEach((c, idx) => {
       if (idx > 0) y -= 8;
@@ -91,7 +91,7 @@ if (fechaFinal) {
   }
 
   if (condicionesCajas.length > 0) {
-    drawText('Condiciones Cajas', { bold: true, size: 14, dy: 20 });
+    drawText('Condiciones Cajas', { bold: true, size: 12, dy: 20 });
 
     condicionesCajas.forEach((c, idx) => {
       if (idx > 0) y -= 8;
@@ -140,9 +140,9 @@ console.log(selectedEmail,userEmail)
 const mailOptions = {
       
       from: 'altaclientes@exclusivasramirez.es',
-      to:'chempe@gmail.com',
-      //to: selectedEmail,
-      //cc: userEmail,
+      //to:'chempe@gmail.com',
+      to: selectedEmail,
+      cc: userEmail,
       subject: `Solicitud de condiciones de ${username || 'usuario no identificado'}`,
       text: `Se adjunta el PDF con los datos de la solicitud de condiciones comerciales.\n\nComentarios adicionales:\n${comentarios || 'Sin comentarios.'}`,
       attachments: [
