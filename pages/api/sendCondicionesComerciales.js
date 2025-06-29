@@ -21,6 +21,7 @@ const {
 
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([595, 842]);
+  const pageRef = { current: page };
   const { height } = page.getSize();
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -36,17 +37,30 @@ const {
     y -= 20;
   }
 
-  const drawText = (text, opts = {}) => {
-    const { size = 11, bold = false, dy = 16 } = opts;
-    y -= dy;
-    page.drawText(text, {
-      x: 40,
-      y,
-      size,
-      font: bold ? fontBold : font,
-      color: rgb(0, 0, 0),
-    });
-  };
+
+
+const drawText = (text, opts = {}) => {
+  const { size = 11, bold = false, dy = 16 } = opts;
+
+  // Si no hay espacio suficiente, añade nueva página y reinicia la altura
+  if (y - dy < 40) {
+    const newPage = pdfDoc.addPage([595, 842]);
+    y = newPage.getSize().height - 60;
+    pageRef.current = newPage;
+  }
+
+  y -= dy;
+
+  pageRef.current.drawText(text, {
+    x: 40,
+    y,
+    size,
+    font: bold ? fontBold : font,
+    color: rgb(0, 0, 0),
+  });
+};
+
+
 
   drawText('Solicitud de Condiciones Comerciales', { size: 16, bold: true, dy: 20 });
   drawText(`Cliente: ${codigoCliente}`);
@@ -126,9 +140,9 @@ console.log(selectedEmail,userEmail)
 const mailOptions = {
       
       from: 'altaclientes@exclusivasramirez.es',
-      //to:'chempe@gmail.com',
-      to: selectedEmail,
-      cc: userEmail,
+      to:'chempe@gmail.com',
+      //to: selectedEmail,
+      //cc: userEmail,
       subject: `Solicitud de condiciones de ${username || 'usuario no identificado'}`,
       text: `Se adjunta el PDF con los datos de la solicitud de condiciones comerciales.\n\nComentarios adicionales:\n${comentarios || 'Sin comentarios.'}`,
       attachments: [

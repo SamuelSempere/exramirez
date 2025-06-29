@@ -31,6 +31,30 @@ export default function SolicitudMaterialPage() {
   const [materialesDisponibles, setMaterialesDisponibles] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLineIndex, setSelectedLineIndex] = useState(null);
+  const [clientes, setClientes] = useState([]);
+
+useEffect(() => {
+  fetch('/clientes.csv')
+    .then(response => response.text())
+    .then(text => {
+      Papa.parse(text, {
+        delimiter: ';',
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          const clientesData = results.data.map(row => ({
+            codigoCliente: row['Nº']?.trim(),
+            cliente: row['Nombre']?.trim(),
+            poblacion: row['Población']?.trim(),
+            direccion: row['Dirección']?.trim(),
+            dni: row['CIF/NIF']?.trim(),
+            vendedor: row['Cód. vendedor']?.trim(),
+          })).filter(c => c.codigoCliente && c.cliente);
+          setClientes(clientesData);
+        },
+      });
+    });
+}, []);
 
   const people = [
     { name: 'José Pardo', email: 'josepardo@exclusivasramirez.es' },
@@ -104,12 +128,44 @@ export default function SolicitudMaterialPage() {
       <>
         <h1>Solicitud de Material</h1>
         <Form layout="vertical" onFinish={onFinish} form={form} style={{ maxWidth: 800, margin: '0 auto' }}>
-          <Form.Item label="Cliente" name="cliente" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Código Cliente" name="codigoCliente" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
+<Form.Item
+  label="Código de Cliente o Establecimiento"
+  name="codigoCliente"
+  rules={[{ required: true }]}
+>
+  <Select
+    showSearch
+    placeholder="Busca por código o cliente"
+    optionFilterProp="label"
+    onChange={(value) => {
+      const cliente = clientes.find(c => c.codigoCliente === value);
+      if (cliente) {
+form.setFieldsValue({
+  codigoCliente: cliente.codigoCliente,
+  cliente: cliente.cliente,
+  direccion: cliente.direccion || '',
+});
+
+      }
+    }}
+  >
+    {clientes.map(cliente => (
+      <Select.Option
+        key={cliente.codigoCliente}
+        value={cliente.codigoCliente}
+        label={`${cliente.codigoCliente} ${cliente.cliente}`}
+      >
+        {`${cliente.codigoCliente} - ${cliente.cliente}`}
+      </Select.Option>
+    ))}
+  </Select>
+</Form.Item>
+
+<Form.Item label="Dirección" name="direccion" rules={[{ required: true }]}>
+  <Input />
+</Form.Item>
+
+
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="Fecha Entrega" name="fechaEntrega" rules={[{ required: true }]}>
