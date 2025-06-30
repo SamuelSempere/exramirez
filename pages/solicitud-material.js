@@ -137,17 +137,16 @@ useEffect(() => {
     showSearch
     placeholder="Busca por código o cliente"
     optionFilterProp="label"
-    onChange={(value) => {
-      const cliente = clientes.find(c => c.codigoCliente === value);
-      if (cliente) {
-form.setFieldsValue({
-  codigoCliente: cliente.codigoCliente,
-  cliente: cliente.cliente,
-  direccion: cliente.direccion || '',
-});
-
-      }
-    }}
+onChange={(value) => {
+  const cliente = clientes.find(c => c.codigoCliente === value);
+  if (cliente) {
+    form.setFieldsValue({
+      codigoCliente: cliente.codigoCliente,
+      cliente: cliente.cliente, // ✅ este valor se rellena correctamente
+      direccion: cliente.direccion || '',
+    });
+  }
+}}
   >
     {clientes.map(cliente => (
       <Select.Option
@@ -160,6 +159,10 @@ form.setFieldsValue({
     ))}
   </Select>
 </Form.Item>
+<Form.Item name="cliente" hidden>
+  <Input />
+</Form.Item>
+
 
 <Form.Item label="Dirección" name="direccion" rules={[{ required: true }]}>
   <Input />
