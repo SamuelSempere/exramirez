@@ -284,14 +284,30 @@ color: white;
 .condicion-item {
   color: white !important;
 }
-.ant-message-notice-content {
-  color: black !important;
-  background-color: white !important;
-  border: 1px solid #d9d9d9;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
 .ant-message-notice-content,
 .ant-message-notice-content * {
   color: black !important;
+  background-color: white !important;
+  border: 1px solid #d9d9d9;
+  border-left-width: 5px;
+  padding-left: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Bordes personalizados según tipo de mensaje */
+.ant-message-success .ant-message-notice-content {
+  border-left-color: #52c41a !important; /* Verde */
+}
+
+.ant-message-error .ant-message-notice-content {
+  border-left-color: #ff4d4f !important; /* Rojo */
+}
+
+.ant-message-warning .ant-message-notice-content {
+  border-left-color: #faad14 !important; /* Amarillo */
+}
+
+.ant-message-info .ant-message-notice-content {
+  border-left-color: #1890ff !important; /* Azul */
 }
 
