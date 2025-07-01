@@ -260,6 +260,9 @@ export default function SolicitudCondicionesPage() {
               ))}
             </Select>
           </Form.Item>
+          <Form.Item name="establecimiento" hidden>
+  <Input />
+</Form.Item>
 
           <Form.Item label="Dirección" name="direccion" rules={[{ required: true }]}><Input /></Form.Item>
           <Form.Item label="Población" name="poblacion" rules={[{ required: true }]}><Input /></Form.Item>
@@ -282,7 +285,7 @@ export default function SolicitudCondicionesPage() {
           <Form.Item label="Vendedor" name="vendedor" rules={[{ required: true }]}><Input /></Form.Item>
           <Form.Item label="VTO Rapel" name="vtoRapel">
   <Select placeholder="Selecciona VTO Rapel">
-    {['Año', 'Semestre', 'Trimestre'].map((op) => (
+    {['NO','Año', 'Semestre', 'Trimestre'].map((op) => (
       <Select.Option key={op} value={op}>{op}</Select.Option>
     ))}
   </Select>

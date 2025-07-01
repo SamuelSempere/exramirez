@@ -7,6 +7,7 @@ import logoBase64 from '../../lib/logoBase64'; // Asegúrate que esta ruta y arc
 async function createCondicionesPDF(formData, username) {
 const {
   codigoCliente,
+  establecimiento,
   direccion,
   poblacion,
   dni,
@@ -64,7 +65,7 @@ const drawText = (text, opts = {}) => {
 
 
   drawText('Solicitud de Condiciones Comerciales', { size: 14, bold: true, dy: 20 });
-  drawText(`Cliente: ${codigoCliente}`);
+  drawText(`Cliente: ${codigoCliente} - ${establecimiento || 'Nombre no especificado'}`);
   drawText(`Dirección: ${direccion}`);
   drawText(`Población: ${poblacion}`);
   drawText(`DNI / NIF: ${dni}`);
