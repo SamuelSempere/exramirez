@@ -13,6 +13,7 @@ const {
   fechaSolicitud,
   fechaFinal, // 👈 Añadir aquí
   vendedor,
+  vtoRapel,
   comentarios,
   condiciones = [],
   condicionesCajas = [],
@@ -74,6 +75,8 @@ if (fechaFinal) {
   drawText(`Vendedor: ${vendedor}`);
   drawText(`Solicitado por: ${username || 'No especificado'}`);
   y -= 10;
+if (vtoRapel) drawText(`VTO Rapel (General): ${vtoRapel}`);
+
 
   if (condiciones.length > 0) {
     drawText('Condiciones Barriles', { bold: true, size: 12, dy: 20 });
@@ -86,7 +89,7 @@ if (fechaFinal) {
       if (c.rapel) drawText(`Rapel (%): ${c.rapel}`);
       if (c.rapeleuro) drawText(`€ Rapel: ${c.rapeleuro}`);
       if (c.cantidadSC) drawText(`Cantidad Sin Cargo: ${c.cantidadSC}`);
-      if (c.vtoRapel) drawText(`VTO Rapel: ${c.vtoRapel}`);
+      
     });
   }
 
@@ -102,7 +105,6 @@ if (fechaFinal) {
       if (c.rapelcaja) drawText(`Rapel (%): ${c.rapelcaja}`);
       if (c.rapeleurocaja) drawText(`€ Rapel: ${c.rapeleurocaja}`);
       if (c.cantidadSC) drawText(`Cantidad Sin Cargo: ${c.cantidadSC}`);
-      if (c.vtoRapel) drawText(`VTO Rapel: ${c.vtoRapel}`);
     });
   }
 
